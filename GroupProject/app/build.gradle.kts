@@ -33,6 +33,9 @@ android {
 }
 
 dependencies {
+    implementation("com.google.firebase:firebase-auth:latest_version")
+    implementation("com.google.firebase:firebase-database:latest_version")
+    implementation("com.google.firebase:firebase-firestore")
     implementation(platform("com.google.firebase:firebase-bom:32.4.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("androidx.appcompat:appcompat:1.6.1")
