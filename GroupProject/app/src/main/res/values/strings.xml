@@ -24,4 +24,6 @@
     <string name="make">Make</string>
     <string name="date">Date</string>
     <string name="value">Value</string>
+    <string name="create_a_new_item">Create A New Item</string>
+    <string name="item_name">Item Name</string>
 </resources>

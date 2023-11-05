@@ -22,4 +22,17 @@
         android:name="com.example.a301groupproject.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+
+    <fragment
+        android:id="@+id/nav_addItem"
+        android:name="com.example.a301groupproject.EditItemFragment"
+        android:label="Add A New Item"
+        tools:layout="@layout/fragment_add_item" />
+
+    <fragment
+        android:id="@+id/nav_images"
+        android:name="com.example.a301groupproject.ImageFragment"
+        android:label="Images"
+        tools:layout="@layout/fragment_images" />
+
 </navigation>

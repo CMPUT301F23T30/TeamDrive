@@ -10,6 +10,7 @@ public class Item implements Serializable {
     private String date;
     private String value;
 
+
     public Item(String name, String model, String make, String date, String value) {
         this.name = name;
         this.model = model;

@@ -19,6 +19,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         this.items = items;
     }
 
+    public ArrayList<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(ArrayList<Item> items) {
+        this.items = items;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
