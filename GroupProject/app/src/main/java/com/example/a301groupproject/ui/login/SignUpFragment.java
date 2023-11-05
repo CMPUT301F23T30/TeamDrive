@@ -49,7 +49,10 @@ public class SignUpFragment extends Fragment {
                 String email = ((EditText) view.findViewById(R.id.editTextEmail)).getText().toString().trim();
                 String password = ((EditText) view.findViewById(R.id.editTextPassword)).getText().toString().trim();
                 String reEnterPassword = ((EditText) view.findViewById(R.id.editTextReEnterPassword)).getText().toString().trim();
-
+                if (username.isEmpty()) {
+                    Toast.makeText(getActivity(), "Username cannot be empty", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (!isValidEmail(email)) {
                     Toast.makeText(getActivity(), "Invalid email format", Toast.LENGTH_SHORT).show();
                     return;
