@@ -13,7 +13,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
-import com.example.a301groupproject.factory.Item;
+import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
 
 public class EditItemFragment extends Fragment {
@@ -36,6 +36,8 @@ public class EditItemFragment extends Fragment {
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // TODO: Need to contain all the attributes (comment, desc...)
                 String itemName = binding.itemNameInput.getText().toString();
                 String itemModel = binding.itemModelInput.getText().toString();
                 String itemMake = binding.itemMakeInput.getText().toString();
@@ -45,7 +47,7 @@ public class EditItemFragment extends Fragment {
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
                 homeViewModel.addItem(item);
 
-                // go back to home page after add
+                // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigateUp();
             }
@@ -54,7 +56,8 @@ public class EditItemFragment extends Fragment {
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.nav_images);
             }
         });
         return view;

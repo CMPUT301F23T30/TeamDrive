@@ -1,4 +1,4 @@
-package com.example.a301groupproject.factory;
+package com.example.a301groupproject.factory.item;
 
 import android.view.LayoutInflater;
 import android.view.View;

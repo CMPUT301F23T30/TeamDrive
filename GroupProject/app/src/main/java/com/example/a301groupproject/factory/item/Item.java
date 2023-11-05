@@ -1,4 +1,4 @@
-package com.example.a301groupproject.factory;
+package com.example.a301groupproject.factory.item;
 
 import java.io.Serializable;
 
@@ -17,6 +17,9 @@ public class Item implements Serializable {
         this.make = make;
         this.date = date;
         this.value = value;
+    }
+
+    public Item() {
     }
 
     public String getName() {
