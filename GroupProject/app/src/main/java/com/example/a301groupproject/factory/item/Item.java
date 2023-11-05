@@ -8,15 +8,20 @@ public class Item implements Serializable {
     private String model;
     private String make;
     private String date;
+    private String serialNumber;
     private String value;
+    private String description;
+    private String comment;
 
-
-    public Item(String name, String model, String make, String date, String value) {
+    public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment) {
         this.name = name;
         this.model = model;
         this.make = make;
         this.date = date;
         this.value = value;
+        this.serialNumber = serialNumber;
+        this.description = description;
+        this.comment = comment;
     }
 
     public Item() {
@@ -61,4 +66,18 @@ public class Item implements Serializable {
     public void setValue(String value) {
         this.value = value;
     }
+
+    public String getSerialNumber(){ return serialNumber;}
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getDescription(){ return description; }
+    public void setDescription(String description){ this.description = description; }
+
+    public String getComment(){ return comment;}
+    public void setComment(String comment){
+        this.comment = comment;
+    }
+
 }

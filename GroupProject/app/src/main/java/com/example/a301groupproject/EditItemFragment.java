@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,15 +37,54 @@ public class EditItemFragment extends Fragment {
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                // TODO: Need to contain all the attributes (comment, desc...)
                 String itemName = binding.itemNameInput.getText().toString();
                 String itemModel = binding.itemModelInput.getText().toString();
                 String itemMake = binding.itemMakeInput.getText().toString();
                 String itemDate = binding.itemDateInput.getText().toString();
                 String estimatedValue = binding.estimatedValueInput.getText().toString();
+                String serialNumber = binding.serialNumberInput.getText().toString();
+                String description = binding.descriptionInput.getText().toString();
+                String comment = binding.commentInput.getText().toString();
 
-                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
+
+                //notification of all required properties
+                if (itemName.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the item name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (itemModel.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the item model", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (itemMake.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the item make", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (itemDate.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the item date", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (estimatedValue.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the item estimated value", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (comment.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the comment", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (description.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the item description", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+
+                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment);
                 homeViewModel.addItem(item);
 
                 // go back to home page after add confirm
