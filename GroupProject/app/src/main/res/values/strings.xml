@@ -18,4 +18,10 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="sign_up"><u>Sign up</u></string>
     <string name="back"><u>back</u></string>
+    <string name="menu">Menu</string>
+    <string name="name">Name</string>
+    <string name="model">Model</string>
+    <string name="make">Make</string>
+    <string name="date">Date</string>
+    <string name="value">Value</string>
 </resources>
