@@ -68,9 +68,9 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/itemMakeInput"
+                android:id="@+id/itemDateInput"
                 android:layout_width="match_parent"
-                android:layout_height="37dp"
+                android:layout_height="39dp"
                 android:background="#C3F4EAEA" />
 
             <TextView
@@ -81,11 +81,75 @@
                 android:textStyle="bold"
                 />
 
-            <EditText
-                android:id="@+id/itemDateInput"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="39dp"
-                android:background="#C3F4EAEA" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_year"
+                    android:layout_width="147dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="2023"
+                    android:background="#C3F4EAEA"
+                    android:ems="4"
+                    android:gravity="center"
+                    android:hint="YYYY"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textSize="20sp">
+
+                </EditText>
+
+                <TextView
+                    android:id="@+id/input_slash_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textSize="25dp">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/input_month"
+                    android:layout_width="86dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="10"
+                    android:background="#C3F4EAEA"
+                    android:ems="2"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textSize="20sp">
+
+                </EditText>
+
+                <TextView
+                    android:id="@+id/input_slash_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textSize="25dp">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/input_day"
+                    android:layout_width="62dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="10"
+                    android:background="#C3F4EAEA"
+                    android:ems="2"
+                    android:gravity="center"
+                    android:hint="DD"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textSize="20sp">
+
+                </EditText>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
