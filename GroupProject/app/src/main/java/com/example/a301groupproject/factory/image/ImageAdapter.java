@@ -46,7 +46,6 @@ public class ImageAdapter extends BaseAdapter {
 
         Image image = images.get(position);
         individualImage.setImageURI(image.getImageUri());
-//        individualImage.setImageBitmap(image.getBitmap());
 
         deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override

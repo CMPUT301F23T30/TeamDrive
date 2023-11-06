@@ -1,5 +1,6 @@
 package com.example.a301groupproject;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,8 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+
+import java.util.ArrayList;
 
 public class EditItemFragment extends Fragment {
 
@@ -44,8 +47,16 @@ public class EditItemFragment extends Fragment {
                 String itemDate = binding.itemDateInput.getText().toString();
                 String estimatedValue = binding.estimatedValueInput.getText().toString();
 
+                ArrayList<String> imageUris = new ArrayList<>();
+                ArrayList<Uri> value = homeViewModel.getImages().getValue();
+
+                for (Uri uri : value) {
+                    imageUris.add(uri.toString());
+                }
+
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
-                homeViewModel.addItem(item);
+                homeViewModel.addItem(item, imageUris);
+                homeViewModel.emptyImages();
 
                 // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
