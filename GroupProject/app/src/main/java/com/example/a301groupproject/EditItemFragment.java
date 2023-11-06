@@ -1,5 +1,6 @@
 package com.example.a301groupproject;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+
+import java.util.ArrayList;
 
 public class EditItemFragment extends Fragment {
 
