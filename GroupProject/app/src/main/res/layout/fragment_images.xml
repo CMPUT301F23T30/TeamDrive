@@ -22,7 +22,7 @@
         android:layout_above="@id/buttonWrapper"
         android:layout_below="@id/image_fragment_title"
         android:horizontalSpacing="5dp"
-        android:numColumns="2"
+        android:numColumns="1"
         android:padding="10dp"
         android:verticalSpacing="5dp" />
 
