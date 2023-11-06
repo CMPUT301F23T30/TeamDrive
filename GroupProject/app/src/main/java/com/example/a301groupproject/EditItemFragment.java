@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,6 +18,8 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +34,12 @@ public class EditItemFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private Uri imageUri;
 
+    EditText itemTagInput;
+    Button add_tag;
+    ChipGroup chipGroup;
+    String input;
+    private Object e;
+
 
     public EditItemFragment() {
     }
@@ -41,6 +51,24 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
+        add_tag = view.findViewById(R.id.addtagbutton);
+        itemTagInput = view.findViewById(R.id.itemTagInput) ;
+        chipGroup = view.findViewById(R.id.chipgroup);
+
+        add_tag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagText = itemTagInput.getText().toString();
+                setChips(tagText);
+
+            }
+        });
+
+
+
+
+
 
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +157,24 @@ public class EditItemFragment extends Fragment {
                 navController.navigate(R.id.nav_images);
             }
         });
+
+
+
         return view;
+
+
+    }
+
+    public void setChips(String e) {
+        final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout,null,false);
+        chip.setText(e);
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chipGroup.removeView(chip);
+            }
+        });
+        chipGroup.addView(chip);
+
     }
 }

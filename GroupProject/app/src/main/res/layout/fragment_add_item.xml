@@ -24,20 +24,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/item_tag"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/itemTagInput"
-                android:layout_width="match_parent"
-                android:layout_height="36dp"
-                android:background="#C3F4EAEA"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
                 android:text="@string/item_name"
                 android:textStyle="bold" />
 
@@ -219,6 +205,41 @@
                 android:layout_height="34dp"
                 android:background="#C3F4EAEA"
                 android:inputType="textMultiLine" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/item_tag"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="503dp"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/itemTagInput"
+                    android:layout_width="214dp"
+                    android:layout_height="36dp"
+                    android:background="#C3F4EAEA"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/addtagbutton"
+                    android:layout_width="113dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="Add Tag" />
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipgroup"
+                android:layout_width="match_parent"
+                android:layout_height="91dp">
+
+            </com.google.android.material.chip.ChipGroup>
 
             <Button
                 android:id="@+id/imageButton"
@@ -246,6 +267,7 @@
                 android:layout_gravity="center"
                 android:backgroundTint="#FF0000"
                 android:text="Delete" />
+
 
 
 
