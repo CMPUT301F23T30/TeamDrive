@@ -1,5 +1,6 @@
 package com.example.a301groupproject;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+
+import java.util.ArrayList;
 
 public class EditItemFragment extends Fragment {
 
@@ -82,6 +85,13 @@ public class EditItemFragment extends Fragment {
                 String itemMake = binding.itemMakeInput.getText().toString();
                 String itemDate = binding.itemDateInput.getText().toString();
                 String estimatedValue = binding.estimatedValueInput.getText().toString();
+
+                ArrayList<String> imageUris = new ArrayList<>();
+                ArrayList<Uri> value = homeViewModel.getImages().getValue();
+
+                for (Uri uri : value) {
+                    imageUris.add(uri.toString());
+                }
 
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
                 if(receivedBundle == null) {

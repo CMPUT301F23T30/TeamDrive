@@ -1,5 +1,7 @@
 package com.example.a301groupproject.ui.home;
 
+import android.net.Uri;
+
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -16,8 +18,25 @@ import java.util.Map;
 
 public class HomeViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Item>> items = new MutableLiveData<>(new ArrayList<>());
+
+    private MutableLiveData<ArrayList<Uri>> images = new MutableLiveData<>(new ArrayList<>());
+
     private FirebaseFirestore db;
     private FirebaseUser user;
+
+    public MutableLiveData<ArrayList<Uri>> getImages() {
+        return images;
+    }
+
+    public void addImage(Uri uri) {
+        ArrayList<Uri> imagesValue = images.getValue();
+        imagesValue.add(uri);
+        images.setValue(imagesValue);
+    }
+
+    public void emptyImages() {
+        images.setValue(new ArrayList<>());
+    }
 
     public MutableLiveData<ArrayList<Item>> getItems() {
         db = FirebaseFirestore.getInstance();
@@ -42,7 +61,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     // add to database
-    public void addItem(Item item) {
+    public void addItem(Item item, ArrayList<String> imageUris) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -53,6 +72,7 @@ public class HomeViewModel extends ViewModel {
         itemData.put("make", item.getMake());
         itemData.put("date", item.getDate());
         itemData.put("value", item.getValue());
+        itemData.put("images", imageUris);
 
         if (user != null) {
             String uid = user.getUid();
