@@ -95,7 +95,7 @@ public class EditItemFragment extends Fragment {
 
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
                 if(receivedBundle == null) {
-                    homeViewModel.addItem(item);
+                    homeViewModel.addItem(item, imageUris);
                 }
                 else {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
