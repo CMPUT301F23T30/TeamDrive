@@ -1,5 +1,6 @@
 package com.example.a301groupproject;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class EditItemFragment extends Fragment {
     private FragmentAddItemBinding binding;
 
     private HomeViewModel homeViewModel;
+    private Uri imageUri;
 
 
     public EditItemFragment() {
@@ -112,7 +114,7 @@ public class EditItemFragment extends Fragment {
                 }
 
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment);
-                homeViewModel.addItem(item);
+                homeViewModel.addItem(item,imageUri);
 
                 // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
