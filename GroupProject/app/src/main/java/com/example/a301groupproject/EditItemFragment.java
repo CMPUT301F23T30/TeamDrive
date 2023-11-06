@@ -1,6 +1,7 @@
 package com.example.a301groupproject;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class EditItemFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
+
     public EditItemFragment() {
     }
 
@@ -32,7 +34,44 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        Bundle receivedBundle = getArguments();
 
+        if (receivedBundle != null) {
+            int receivedIntValue = (receivedBundle.getInt("loc"));
+
+            Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+
+            binding.itemNameInput.setText(i.getName());
+            binding.itemModelInput.setText(i.getModel());
+            binding.itemMakeInput.setText(i.getMake());
+            binding.itemDateInput.setText(i.getDate());
+            binding.estimatedValueInput.setText(i.getValue());
+
+            binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    homeViewModel.removeItem(homeViewModel.getItems().getValue().get(receivedIntValue));
+                    NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+                    navController.navigateUp();
+
+                }
+            });
+            /*binding.confirmButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String itemName = binding.itemNameInput.getText().toString();
+                    String itemModel = binding.itemModelInput.getText().toString();
+                    String itemMake = binding.itemMakeInput.getText().toString();
+                    String itemDate = binding.itemDateInput.getText().toString();
+                    String estimatedValue = binding.estimatedValueInput.getText().toString();
+
+                    Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
+                    item.setId(i.getId());
+                    homeViewModel.editItem(item);
+
+                }
+            });*/
+        }
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -45,7 +84,15 @@ public class EditItemFragment extends Fragment {
                 String estimatedValue = binding.estimatedValueInput.getText().toString();
 
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
-                homeViewModel.addItem(item);
+                if(receivedBundle == null) {
+                    homeViewModel.addItem(item);
+                }
+                else {
+                    int receivedIntValue = (receivedBundle.getInt("loc"));
+                    Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+                    item.setId(i.getId());
+                    homeViewModel.editItem(item);
+                }
 
                 // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
