@@ -21,9 +21,8 @@ import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.factory.item.ItemAdapter;
 
 import java.util.ArrayList;
-import java.util.Map;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements RvInterface {
 
     private FragmentHomeBinding binding;
 
@@ -44,43 +43,13 @@ public class HomeFragment extends Fragment {
         recyclerView = binding.recycleView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        itemAdapter = new ItemAdapter(itemList);
+        itemAdapter = new ItemAdapter(itemList,this);
         recyclerView.setAdapter(itemAdapter);
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getItems().observe(getViewLifecycleOwner(), items -> {
             itemAdapter.setItems(items);
             itemAdapter.notifyDataSetChanged();
-        });
-
-        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            boolean isNavigationExecuted = false;
-            @Override
-            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-                View childView = rv.findChildViewUnder(e.getX(), e.getY());
-                if (childView != null && !isNavigationExecuted) {
-                    int position = rv.getChildAdapterPosition(childView);
-                    Log.d("MyTag", "The clicking position is: " + position);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("loc",position);
-                    NavController navController = NavHostFragment.findNavController(HomeFragment.this);
-                    navController.navigate(R.id.nav_addItem,bundle);
-                    isNavigationExecuted = true;
-                }
-                return false;
-
-            }
-
-            @Override
-            public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
-
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-
-            }
         });
 
         return root;
@@ -92,4 +61,12 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
+    @Override
+    public void onItemClick(int position) {
+        Log.d("MyTag", "The clicking position is: " + position);
+        Bundle bundle = new Bundle();
+        bundle.putInt("loc",position);
+        NavController navController = NavHostFragment.findNavController(HomeFragment.this);
+        navController.navigate(R.id.nav_addItem,bundle);
+    }
 }
