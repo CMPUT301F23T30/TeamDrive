@@ -94,7 +94,7 @@ public class HomeViewModel extends ViewModel {
         db.collection("users").document(user.getUid()).collection("items").document(item.getId()).delete();
     }
 
-    public void editItem(Item item) {
+    public void editItem(Item item,ArrayList<String> imageUris) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         DocumentReference itemRef = db.collection("users").document(user.getUid()).collection("items").document(item.getId());
@@ -104,6 +104,7 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("make", item.getMake());
         updatedData.put("date", item.getDate());
         updatedData.put("value", item.getValue());
+        updatedData.put("images", imageUris);
         itemRef.set(updatedData);
     }
 }

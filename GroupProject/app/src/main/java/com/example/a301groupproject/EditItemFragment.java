@@ -59,21 +59,6 @@ public class EditItemFragment extends Fragment {
 
                 }
             });
-            /*binding.confirmButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String itemName = binding.itemNameInput.getText().toString();
-                    String itemModel = binding.itemModelInput.getText().toString();
-                    String itemMake = binding.itemMakeInput.getText().toString();
-                    String itemDate = binding.itemDateInput.getText().toString();
-                    String estimatedValue = binding.estimatedValueInput.getText().toString();
-
-                    Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
-                    item.setId(i.getId());
-                    homeViewModel.editItem(item);
-
-                }
-            });*/
         }
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,7 +86,7 @@ public class EditItemFragment extends Fragment {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
-                    homeViewModel.editItem(item);
+                    homeViewModel.editItem(item,imageUris);
                 }
 
                 // go back to home page after add confirm
