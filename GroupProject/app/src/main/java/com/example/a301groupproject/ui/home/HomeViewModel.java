@@ -28,8 +28,6 @@ public class HomeViewModel extends ViewModel {
         return images;
     }
 
-    
-
     public void addImage(Uri uri) {
         ArrayList<Uri> imagesValue = images.getValue();
         imagesValue.add(uri);
@@ -104,5 +102,20 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("value", item.getValue());
         updatedData.put("images", imageUris);
         itemRef.set(updatedData);
+    }
+
+    public double calculateTotalValue() {
+        double total = 0.0;
+        ArrayList<Item> itemsList = items.getValue();
+        if (itemsList != null) {
+            for (Item item : itemsList) {
+                try {
+                    total += Double.parseDouble(item.getValue());
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return total;
     }
 }

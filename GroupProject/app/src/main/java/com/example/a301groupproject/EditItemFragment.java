@@ -16,18 +16,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-
 
 public class EditItemFragment extends Fragment {
 
@@ -188,7 +188,8 @@ public class EditItemFragment extends Fragment {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
-                    homeViewModel.editItem(item, imageUris);
+                    homeViewModel.editItem(item,imageUris);
+                    homeViewModel.emptyImages();
                 }
 
                 // go back to home page after add confirm
@@ -198,11 +199,9 @@ public class EditItemFragment extends Fragment {
         });
 
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.nav_images);
+
             }
         });
 

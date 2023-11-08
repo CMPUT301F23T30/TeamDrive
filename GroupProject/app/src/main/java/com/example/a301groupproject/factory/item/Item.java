@@ -16,6 +16,7 @@ public class Item implements Serializable {
     private String comment;
     private String id;
     private ArrayList<String> images;
+    private boolean isChecked;
 
     public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment, ArrayList<String> tags) {
         this.name = name;
@@ -39,6 +40,15 @@ public class Item implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
 
     public String getModel() {
         return model;

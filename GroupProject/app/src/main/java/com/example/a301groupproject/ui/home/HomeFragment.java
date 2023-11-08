@@ -3,7 +3,6 @@ package com.example.a301groupproject.ui.home;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -21,6 +20,7 @@ import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.factory.item.ItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class HomeFragment extends Fragment implements RvInterface {
 
@@ -43,13 +43,21 @@ public class HomeFragment extends Fragment implements RvInterface {
         recyclerView = binding.recycleView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        itemAdapter = new ItemAdapter(itemList,this);
+        itemAdapter = new ItemAdapter(itemList, this);
         recyclerView.setAdapter(itemAdapter);
+
+        binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteSelectedItems();
+            }
+        });
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getItems().observe(getViewLifecycleOwner(), items -> {
             itemAdapter.setItems(items);
             itemAdapter.notifyDataSetChanged();
+            updateTotalValue();
         });
 
         return root;
@@ -61,12 +69,32 @@ public class HomeFragment extends Fragment implements RvInterface {
         binding = null;
     }
 
+    private void updateTotalValue() {
+        double totalValue = homeViewModel.calculateTotalValue();
+        String formattedTotal = String.format(Locale.getDefault(), "Total Value: $%.2f", totalValue);
+
+        binding.totalValueTextView.setText(formattedTotal);
+    }
+
+    private void deleteSelectedItems() {
+        ArrayList<Item> itemsToRemove = new ArrayList<>();
+        for (Item item : homeViewModel.getItems().getValue()) {
+            if (item.isChecked()) {
+                itemsToRemove.add(item);
+            }
+        }
+        for (Item item : itemsToRemove) {
+            homeViewModel.removeItem(item);
+        }
+
+    }
+
     @Override
     public void onItemClick(int position) {
         Log.d("MyTag", "The clicking position is: " + position);
         Bundle bundle = new Bundle();
-        bundle.putInt("loc",position);
+        bundle.putInt("loc", position);
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
-        navController.navigate(R.id.nav_addItem,bundle);
+        navController.navigate(R.id.nav_addItem, bundle);
     }
 }

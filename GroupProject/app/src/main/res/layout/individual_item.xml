@@ -5,6 +5,12 @@
     android:orientation="horizontal"
     android:padding="8dp">
 
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="15dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="2dp"/>
+
     <TextView
         android:id="@+id/item_name"
         android:layout_width="0dp"
