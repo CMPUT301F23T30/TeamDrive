@@ -203,6 +203,8 @@ public class EditItemFragment extends Fragment {
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
                     homeViewModel.editItem(item, imageUris);
+                    homeViewModel.editItem(item,imageUris);
+                    homeViewModel.emptyImages();
                 }
 
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
