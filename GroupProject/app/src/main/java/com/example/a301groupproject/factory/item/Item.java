@@ -1,6 +1,7 @@
 package com.example.a301groupproject.factory.item;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Item implements Serializable {
 
@@ -10,6 +11,7 @@ public class Item implements Serializable {
     private String date;
     private String value;
     private String id;
+    private ArrayList<String> images;
 
 
     public Item(String name, String model, String make, String date, String value) {
@@ -69,5 +71,13 @@ public class Item implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
     }
 }
