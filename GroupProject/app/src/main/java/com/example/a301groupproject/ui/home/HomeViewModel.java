@@ -61,7 +61,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     // add to database
-    public void addItem(Item item, ArrayList<String> imageUris) {
+    public void addItem(Item item, Uri imageUris) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -73,6 +73,7 @@ public class HomeViewModel extends ViewModel {
         itemData.put("date", item.getDate());
         itemData.put("value", item.getValue());
         itemData.put("images", imageUris);
+        itemData.put("Tags",item.getTags());
 
         if (user != null) {
             String uid = user.getUid();

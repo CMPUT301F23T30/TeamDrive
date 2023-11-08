@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,10 +19,13 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -29,6 +34,14 @@ public class EditItemFragment extends Fragment {
     private FragmentAddItemBinding binding;
 
     private HomeViewModel homeViewModel;
+    private Uri imageUri;
+
+    EditText itemTagInput;
+    Button add_tag;
+    ChipGroup chipGroup;
+    ArrayList<String> tagList = new ArrayList<>();
+    String input;
+    private Object e;
 
 
     public EditItemFragment() {
@@ -65,6 +78,21 @@ public class EditItemFragment extends Fragment {
                 homeViewModel.addImage(Uri.parse(uri));
             }
 
+
+        //Tags function
+        add_tag = view.findViewById(R.id.addtagbutton);
+        itemTagInput = view.findViewById(R.id.itemTagInput) ;
+        chipGroup = view.findViewById(R.id.chipgroup);
+
+        add_tag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagText = itemTagInput.getText().toString();
+                setChips(tagText);
+            }
+        });
+
+
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -75,6 +103,7 @@ public class EditItemFragment extends Fragment {
                 }
             });
         }
+
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             // not done with the limits
@@ -90,7 +119,6 @@ public class EditItemFragment extends Fragment {
                 String month = binding.inputMonth.getText().toString();
                 String day = binding.inputDay.getText().toString();
                 String itemDate = year + "-" + month + '-' + day;
-
 
                 //notification of all required properties
                 if (itemName.isEmpty()) {
@@ -154,7 +182,7 @@ public class EditItemFragment extends Fragment {
                     imageUris.add(uri.toString());
                 }
 
-                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description, comment);
+                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment,tagList);
                 if(receivedBundle == null) {
                     homeViewModel.addItem(item, imageUris);
                     homeViewModel.emptyImages();
@@ -180,6 +208,33 @@ public class EditItemFragment extends Fragment {
                 navController.navigate(R.id.nav_images);
             }
         });
+
+
+
         return view;
+
+
+    }
+
+
+    //adding the tag into the list or remove it
+    public void setChips(String e) {
+        final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout,null,false);
+        chip.setText(e);
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagList.add(e);
+            }
+        });
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chipGroup.removeView(chip);
+                tagList.remove(e);
+            }
+        });
+        chipGroup.addView(chip);
+
     }
 }
