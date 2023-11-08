@@ -28,6 +28,8 @@ public class HomeViewModel extends ViewModel {
         return images;
     }
 
+    
+
     public void addImage(Uri uri) {
         ArrayList<Uri> imagesValue = images.getValue();
         imagesValue.add(uri);
