@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E5B5B5"
     android:orientation="vertical"
     android:padding="16dp">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbarTrackHorizontal="@drawable/ic_menu_camera">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -19,119 +23,244 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="@string/create_a_new_item"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/item_name" />
+                android:text="@string/item_name"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/itemNameInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="36dp"
+                android:background="#C3F4EAEA" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Model" />
+                android:text="Model"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/itemModelInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="36dp"
+                android:background="#C3F4EAEA" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Make" />
+                android:text="Make"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/itemMakeInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="39dp"
+                android:background="#C3F4EAEA" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Date" />
+                android:text="Date"
+                android:textStyle="bold"
+                />
 
-            <EditText
-                android:id="@+id/itemDateInput"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/input_year"
+                    android:layout_width="147dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="2023"
+                    android:background="#C3F4EAEA"
+                    android:ems="4"
+                    android:gravity="center"
+                    android:hint="YYYY"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textSize="20sp">
+
+                </EditText>
+
+                <TextView
+                    android:id="@+id/input_slash_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textSize="25dp">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/input_month"
+                    android:layout_width="86dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="10"
+                    android:background="#C3F4EAEA"
+                    android:ems="2"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textSize="20sp">
+
+                </EditText>
+
+                <TextView
+                    android:id="@+id/input_slash_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="-"
+                    android:textSize="25dp">
+
+                </TextView>
+
+                <EditText
+                    android:id="@+id/input_day"
+                    android:layout_width="62dp"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="10"
+                    android:background="#C3F4EAEA"
+                    android:ems="2"
+                    android:gravity="center"
+                    android:hint="DD"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:textSize="20sp">
+
+                </EditText>
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Serial Number" />
+                android:text="Serial Number"
+                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/serialNumberInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/serialNumberInput"
+                    android:layout_width="304dp"
+                    android:layout_height="35dp"
+                    android:background="#C3F4EAEA" />
+
+                <ImageButton
+                    android:id="@+id/imageButton2"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:background="#E5B5B5"
+                    android:gravity="center"
+                    app:srcCompat="@drawable/ic_menu_camera" />
+
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Estimate Value" />
+                android:text="Estimate Value"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/estimatedValueInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="36dp"
+                android:background="#C3F4EAEA"
+                android:inputType="numberDecimal"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Description" />
+                android:text="Description"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/descriptionInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="38dp"
+                android:background="#C3F4EAEA"
                 android:inputType="textMultiLine" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="Comment" />
+                android:text="Comment"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/commentInput"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="34dp"
+                android:background="#C3F4EAEA"
                 android:inputType="textMultiLine" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:text="@string/item_tag"
+                android:textStyle="bold" />
+
+
+            <LinearLayout
+                android:layout_width="503dp"
+                android:layout_height="60dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/itemTagInput"
+                    android:layout_width="214dp"
+                    android:layout_height="36dp"
+                    android:background="#C3F4EAEA"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/addtagbutton"
+                    android:layout_width="113dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="30dp"
+                    android:text="Add Tag" />
+
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/chipgroup"
+                android:layout_width="match_parent"
+                android:layout_height="91dp">
+
+            </com.google.android.material.chip.ChipGroup>
 
             <Button
                 android:id="@+id/imageButton"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#FFD700"
+                android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="5dp"
-                android:layout_gravity="center"
+                android:backgroundTint="#FFD700"
                 android:text="Images" />
 
             <Button
                 android:id="@+id/confirmButton"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
+
                 android:backgroundTint="#ADD8E6"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="5dp"
+
                 android:layout_gravity="center"
                 android:text="Confirm" />
 
@@ -139,9 +268,12 @@
                 android:id="@+id/deleteButton"
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
-                android:backgroundTint="#FF0000"
                 android:layout_gravity="center"
+                android:backgroundTint="#FF0000"
                 android:text="Delete" />
+
+
+
 
         </LinearLayout>
     </ScrollView>

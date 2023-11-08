@@ -9,17 +9,24 @@ public class Item implements Serializable {
     private String model;
     private String make;
     private String date;
+    private String serialNumber;
     private String value;
+    private ArrayList<String> tags;
+    private String description;
+    private String comment;
     private String id;
     private ArrayList<String> images;
 
-
-    public Item(String name, String model, String make, String date, String value) {
+    public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment, ArrayList<String> tags) {
         this.name = name;
         this.model = model;
         this.make = make;
         this.date = date;
         this.value = value;
+        this.serialNumber = serialNumber;
+        this.description = description;
+        this.comment = comment;
+        this.tags = tags;
     }
 
     public Item() {
@@ -65,6 +72,27 @@ public class Item implements Serializable {
         this.value = value;
     }
 
+    public String getSerialNumber(){ return serialNumber;}
+    public void setSerialNumber(String serialNumber) {
+        this.serialNumber = serialNumber;
+    }
+
+    public String getDescription(){ return description; }
+    public void setDescription(String description){ this.description = description; }
+
+    public String getComment(){ return comment;}
+    public void setComment(String comment){
+        this.comment = comment;
+    }
+
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+  
     public String getId() {
         return id;
     }
@@ -80,4 +108,5 @@ public class Item implements Serializable {
     public void setImages(ArrayList<String> images) {
         this.images = images;
     }
+
 }

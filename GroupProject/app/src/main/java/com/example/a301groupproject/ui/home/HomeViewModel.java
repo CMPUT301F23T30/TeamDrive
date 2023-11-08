@@ -14,20 +14,36 @@ public class HomeViewModel extends ViewModel {
         return items;
     }
 
-    public void addItem(Item item) {
-        ArrayList<Item> itemsValue = items.getValue();
-        if (item != null) {
-            itemsValue.add(item);
-            items.setValue(itemsValue);
+
+    public void addItem(Item item, Uri imageUris) {
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+
+        Map<String, Object> itemData = new HashMap<>();
+
+        itemData.put("name", item.getName());
+        itemData.put("model", item.getModel());
+        itemData.put("make", item.getMake());
+        itemData.put("date", item.getDate());
+        itemData.put("value", item.getValue());
+        itemData.put("images", imageUris);
+        itemData.put("Tags",item.getTags());
+
+        if (user != null) {
+            String uid = user.getUid();
+
+            // TODO: implement successful and fail message
+            db.collection("users").document(uid).collection("items").document().set(itemData);
+
         }
     }
 
     public void removeItem(Item item) {
-        ArrayList<Item> itemsValue = items.getValue();
-        if (item != null) {
-            itemsValue.remove(item);
-            items.setValue(itemsValue);
-        }
+
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        db.collection("users").document(user.getUid()).collection("items").document(item.getId()).delete();
+
     }
 
     public double calculateTotalValue() {
