@@ -239,7 +239,6 @@
                 android:id="@+id/chipgroup"
                 android:layout_width="match_parent"
                 android:layout_height="91dp">
-
             </com.google.android.material.chip.ChipGroup>
 
             <Button
@@ -268,9 +267,6 @@
                 android:layout_gravity="center"
                 android:backgroundTint="#FF0000"
                 android:text="Delete" />
-
-
-
 
         </LinearLayout>
     </ScrollView>

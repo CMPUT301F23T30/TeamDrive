@@ -56,6 +56,19 @@ public class EditItemFragment extends Fragment {
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         Bundle receivedBundle = getArguments();
 
+        //Tags function
+        add_tag = view.findViewById(R.id.addtagbutton);
+        itemTagInput = view.findViewById(R.id.itemTagInput);
+        chipGroup = view.findViewById(R.id.chipgroup);
+
+        add_tag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagText = itemTagInput.getText().toString();
+                setChips(tagText);
+            }
+        });
+
         if (receivedBundle != null) {
             int receivedIntValue = (receivedBundle.getInt("loc"));
 
@@ -74,24 +87,9 @@ public class EditItemFragment extends Fragment {
 
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
-            for(String uri :imageUris){
+            for (String uri : imageUris) {
                 homeViewModel.addImage(Uri.parse(uri));
             }
-
-
-        //Tags function
-        add_tag = view.findViewById(R.id.addtagbutton);
-        itemTagInput = view.findViewById(R.id.itemTagInput) ;
-        chipGroup = view.findViewById(R.id.chipgroup);
-
-        add_tag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tagText = itemTagInput.getText().toString();
-                setChips(tagText);
-            }
-        });
-
 
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -182,16 +180,15 @@ public class EditItemFragment extends Fragment {
                     imageUris.add(uri.toString());
                 }
 
-                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment,tagList);
-                if(receivedBundle == null) {
+                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description, comment, tagList);
+                if (receivedBundle == null) {
                     homeViewModel.addItem(item, imageUris);
                     homeViewModel.emptyImages();
-                }
-                else {
+                } else {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
-                    homeViewModel.editItem(item,imageUris);
+                    homeViewModel.editItem(item, imageUris);
                 }
 
                 // go back to home page after add confirm
@@ -209,17 +206,13 @@ public class EditItemFragment extends Fragment {
             }
         });
 
-
-
         return view;
-
-
     }
 
 
     //adding the tag into the list or remove it
     public void setChips(String e) {
-        final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout,null,false);
+        final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout, null, false);
         chip.setText(e);
         chip.setOnClickListener(new View.OnClickListener() {
             @Override

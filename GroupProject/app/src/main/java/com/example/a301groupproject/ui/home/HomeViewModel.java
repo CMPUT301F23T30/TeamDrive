@@ -61,7 +61,7 @@ public class HomeViewModel extends ViewModel {
     }
 
     // add to database
-    public void addItem(Item item, Uri imageUris) {
+    public void addItem(Item item, ArrayList<String> imageUris) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
 
