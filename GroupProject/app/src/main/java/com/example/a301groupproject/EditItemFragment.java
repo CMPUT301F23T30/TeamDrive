@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -53,6 +54,29 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        Bundle receivedBundle = getArguments();
+
+        if (receivedBundle != null) {
+            int receivedIntValue = (receivedBundle.getInt("loc"));
+
+            Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+
+            String date = i.getDate();
+            String[] year_month_day = date.split("-");
+
+            binding.itemNameInput.setText(i.getName());
+            binding.itemModelInput.setText(i.getModel());
+            binding.itemMakeInput.setText(i.getMake());
+            binding.inputYear.setText(year_month_day[0]);
+            binding.inputMonth.setText(year_month_day[1]);
+            binding.inputDay.setText(year_month_day[2]);
+            binding.estimatedValueInput.setText(i.getValue());
+
+            homeViewModel.emptyImages();
+            ArrayList<String> imageUris = i.getImages();
+            for(String uri :imageUris){
+                homeViewModel.addImage(Uri.parse(uri));
+            }
 
 
         //Tags function
@@ -69,9 +93,16 @@ public class EditItemFragment extends Fragment {
         });
 
 
+            binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    homeViewModel.removeItem(homeViewModel.getItems().getValue().get(receivedIntValue));
+                    NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+                    navController.navigateUp();
 
-
-
+                }
+            });
+        }
 
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,8 +175,24 @@ public class EditItemFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
                 }
 
+                ArrayList<String> imageUris = new ArrayList<>();
+                ArrayList<Uri> UriImageUris = homeViewModel.getImages().getValue();
+
+                for (Uri uri : UriImageUris) {
+                    imageUris.add(uri.toString());
+                }
+
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment,tagList);
-                homeViewModel.addItem(item,imageUri);
+                if(receivedBundle == null) {
+                    homeViewModel.addItem(item, imageUris);
+                    homeViewModel.emptyImages();
+                }
+                else {
+                    int receivedIntValue = (receivedBundle.getInt("loc"));
+                    Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+                    item.setId(i.getId());
+                    homeViewModel.editItem(item,imageUris);
+                }
 
                 // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
@@ -154,6 +201,7 @@ public class EditItemFragment extends Fragment {
         });
 
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);

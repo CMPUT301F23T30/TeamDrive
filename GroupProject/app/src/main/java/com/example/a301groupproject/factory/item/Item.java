@@ -14,6 +14,8 @@ public class Item implements Serializable {
     private ArrayList<String> tags;
     private String description;
     private String comment;
+    private String id;
+    private ArrayList<String> images;
 
     public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment, ArrayList<String> tags) {
         this.name = name;
@@ -90,4 +92,21 @@ public class Item implements Serializable {
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
     }
+  
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public ArrayList<String> getImages() {
+        return images;
+    }
+
+    public void setImages(ArrayList<String> images) {
+        this.images = images;
+    }
+
 }
