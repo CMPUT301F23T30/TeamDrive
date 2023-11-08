@@ -1,11 +1,12 @@
 package com.example.a301groupproject;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,7 +20,7 @@ import com.example.a301groupproject.ui.home.HomeViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
 
 
@@ -47,17 +48,21 @@ public class EditItemFragment extends Fragment {
 
             Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
 
+            String date = i.getDate();
+            String[] year_month_day = date.split("-");
+
             binding.itemNameInput.setText(i.getName());
             binding.itemModelInput.setText(i.getModel());
             binding.itemMakeInput.setText(i.getMake());
-            binding.itemDateInput.setText(i.getDate());
+            binding.inputYear.setText(year_month_day[0]);
+            binding.inputMonth.setText(year_month_day[1]);
+            binding.inputDay.setText(year_month_day[2]);
             binding.estimatedValueInput.setText(i.getValue());
 
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
             for(String uri :imageUris){
                 homeViewModel.addImage(Uri.parse(uri));
-
             }
 
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
@@ -142,7 +147,14 @@ public class EditItemFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
                 }
 
-                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
+                ArrayList<String> imageUris = new ArrayList<>();
+                ArrayList<Uri> UriImageUris = homeViewModel.getImages().getValue();
+
+                for (Uri uri : UriImageUris) {
+                    imageUris.add(uri.toString());
+                }
+
+                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description, comment);
                 if(receivedBundle == null) {
                     homeViewModel.addItem(item, imageUris);
                     homeViewModel.emptyImages();
