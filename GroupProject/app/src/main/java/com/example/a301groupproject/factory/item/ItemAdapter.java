@@ -3,6 +3,7 @@ package com.example.a301groupproject.factory.item;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -46,6 +47,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.makeTextView.setText(item.getMake());
         holder.dateTextView.setText(item.getDate());
         holder.valueTextView.setText(item.getValue());
+
+        holder.checkBox.setOnCheckedChangeListener(null);
+        holder.checkBox.setChecked(item.isChecked());
+
+        holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            item.setChecked(isChecked);
+        });
     }
 
     @Override
@@ -54,6 +62,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public CheckBox checkBox;
         public TextView nameTextView;
         public TextView modelTextView;
         public TextView makeTextView;
@@ -62,6 +71,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 
         public ViewHolder(View itemView,RvInterface rvInterface) {
             super(itemView);
+            checkBox = itemView.findViewById(R.id.checkbox);
             nameTextView = itemView.findViewById(R.id.item_name);
             modelTextView = itemView.findViewById(R.id.item_model);
             makeTextView = itemView.findViewById(R.id.item_make);
