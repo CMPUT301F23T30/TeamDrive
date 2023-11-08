@@ -105,13 +105,6 @@ public class EditItemFragment extends Fragment {
                 homeViewModel.addImage(Uri.parse(uri));
             }
 
-            chipGroup.removeAllViews();
-            tagList.clear();
-            ArrayList<String> tags = i.getTags();
-            for(String tag:tags){
-                setChips(tag);
-            }
-
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -211,8 +204,7 @@ public class EditItemFragment extends Fragment {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
-                    homeViewModel.editItem(item,imageUris);
-                    homeViewModel.emptyImages();
+                    homeViewModel.editItem(item, imageUris);
                 }
 
                 // go back to home page after add confirm
