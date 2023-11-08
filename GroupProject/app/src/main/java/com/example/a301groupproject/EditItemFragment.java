@@ -95,12 +95,21 @@ public class EditItemFragment extends Fragment {
             binding.inputDay.setText(year_month_day[2]);
             binding.serialNumberInput.setText(i.getSerialNumber());
             binding.estimatedValueInput.setText(i.getValue());
+            binding.descriptionInput.setText(i.getDescription());
+            binding.commentInput.setText(i.getComment());
 
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
             for (String uri : imageUris) {
                 homeViewModel.addImage(Uri.parse(uri));
             }
+
+                chipGroup.removeAllViews();
+                tagList.clear();
+                ArrayList<String> tags = i.getTags();
+                for(String tag:tags){
+                    setChips(tag);
+                }
 
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override

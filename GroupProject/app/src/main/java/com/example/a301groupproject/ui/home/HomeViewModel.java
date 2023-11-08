@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.a301groupproject.factory.Item;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class HomeViewModel extends ViewModel {
         itemData.put("date", item.getDate());
         itemData.put("serialNumber",item.getSerialNumber());
         itemData.put("value", item.getValue());
+        itemData.put("description",item.getDescription());
+        itemData.put("comment",item.getComment());
         itemData.put("images", imageUris);
         itemData.put("tags",item.getTags());
 
@@ -90,8 +93,12 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("model", item.getModel());
         updatedData.put("make", item.getMake());
         updatedData.put("date", item.getDate());
+        updatedData.put("serialNumber",item.getSerialNumber());
         updatedData.put("value", item.getValue());
+        updatedData.put("description",item.getDescription());
+        updatedData.put("comment",item.getComment());
         updatedData.put("images", imageUris);
+        updatedData.put("tags",item.getTags());
         itemRef.set(updatedData);
     }
     public double calculateTotalValue() {
