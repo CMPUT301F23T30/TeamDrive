@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E5B5B5">
-
+    android:layout_height="match_parent">
     <TextView
         android:id="@+id/image_fragment_title"
         android:layout_width="match_parent"
@@ -62,4 +60,4 @@
 
     </LinearLayout>
 
-</RelativeLayout>
+

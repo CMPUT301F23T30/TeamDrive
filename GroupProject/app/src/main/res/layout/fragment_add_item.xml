@@ -257,9 +257,8 @@
                 android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#ADD8E6"
-                android:layout_marginBottom="5dp"
-                android:layout_gravity="center"
-                android:text="Confirm" />
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp" />
 
             <Button
                 android:id="@+id/deleteButton"

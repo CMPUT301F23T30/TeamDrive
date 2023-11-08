@@ -1,36 +1,6 @@
 package com.example.a301groupproject;
 
-import static android.app.Activity.RESULT_OK;
-
-import android.content.Intent;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Environment;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.GridView;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
-import com.example.a301groupproject.factory.image.Image;
-import com.example.a301groupproject.factory.image.ImageAdapter;
-import com.example.a301groupproject.ui.home.HomeViewModel;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Fragment for showing images. Users can add images by taking photos or
@@ -176,3 +146,4 @@ public class ImageFragment extends Fragment {
         return newImageUri;
     }
 }
+

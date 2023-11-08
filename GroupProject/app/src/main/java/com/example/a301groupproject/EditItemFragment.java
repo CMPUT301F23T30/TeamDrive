@@ -17,7 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
-import com.example.a301groupproject.factory.item.Item;
+import com.example.a301groupproject.factory.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -65,7 +65,6 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        Bundle receivedBundle = getArguments();
 
         //Tags function
         add_tag = view.findViewById(R.id.addtagbutton);
@@ -117,7 +116,6 @@ public class EditItemFragment extends Fragment {
         }else {
             binding.deleteButton.setVisibility(View.INVISIBLE);
         }
-
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             // not done with the limits
@@ -207,7 +205,6 @@ public class EditItemFragment extends Fragment {
                     homeViewModel.editItem(item, imageUris);
                 }
 
-                // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigateUp();
             }
@@ -216,8 +213,7 @@ public class EditItemFragment extends Fragment {
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.nav_images);
+
             }
         });
 
