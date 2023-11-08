@@ -23,6 +23,7 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -37,6 +38,7 @@ public class EditItemFragment extends Fragment {
     EditText itemTagInput;
     Button add_tag;
     ChipGroup chipGroup;
+    ArrayList<String> tagList = new ArrayList<>();
     String input;
     private Object e;
 
@@ -61,6 +63,7 @@ public class EditItemFragment extends Fragment {
             public void onClick(View v) {
                 String tagText = itemTagInput.getText().toString();
                 setChips(tagText);
+
 
             }
         });
@@ -141,7 +144,7 @@ public class EditItemFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
                 }
 
-                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment);
+                Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description,comment,tagList);
                 homeViewModel.addItem(item,imageUri);
 
                 // go back to home page after add confirm
@@ -168,10 +171,17 @@ public class EditItemFragment extends Fragment {
     public void setChips(String e) {
         final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout,null,false);
         chip.setText(e);
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                tagList.add(e);
+            }
+        });
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chipGroup.removeView(chip);
+                tagList.remove(e);
             }
         });
         chipGroup.addView(chip);
