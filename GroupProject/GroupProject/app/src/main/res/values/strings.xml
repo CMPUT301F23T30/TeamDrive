@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">301 Group Project</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="description_user_image">User Image</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="button_sign_in">Sign in</string>
+
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
+    <string name="sign_up"><u>Sign up</u></string>
+    <string name="back"><u>back</u></string>
+    <string name="menu">Menu</string>
+    <string name="name">Name</string>
+    <string name="model">Model</string>
+    <string name="make">Make</string>
+    <string name="date">Date</string>
+    <string name="value">Value</string>
+    <string name="create_a_new_item">Create A New Item</string>
+    <string name="item_name">Item Name</string>
+</resources>
