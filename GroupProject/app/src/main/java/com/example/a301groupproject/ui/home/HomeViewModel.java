@@ -84,11 +84,6 @@ public class HomeViewModel extends ViewModel {
 
     // TODO: need to be rewritten
     public void removeItem(Item item) {
-//        ArrayList<Item> itemsValue = items.getValue();
-//        if (item != null) {
-//            itemsValue.remove(item);
-//            items.setValue(itemsValue);
-//        }
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         db.collection("users").document(user.getUid()).collection("items").document(item.getId()).delete();
