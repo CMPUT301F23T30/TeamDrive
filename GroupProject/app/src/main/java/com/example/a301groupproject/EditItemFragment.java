@@ -50,6 +50,13 @@ public class EditItemFragment extends Fragment {
             binding.itemDateInput.setText(i.getDate());
             binding.estimatedValueInput.setText(i.getValue());
 
+            homeViewModel.emptyImages();
+            ArrayList<String> imageUris = i.getImages();
+            for(String uri :imageUris){
+                homeViewModel.addImage(Uri.parse(uri));
+
+            }
+
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -81,6 +88,7 @@ public class EditItemFragment extends Fragment {
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
                 if(receivedBundle == null) {
                     homeViewModel.addItem(item, imageUris);
+                    homeViewModel.emptyImages();
                 }
                 else {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
@@ -96,6 +104,7 @@ public class EditItemFragment extends Fragment {
         });
 
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
