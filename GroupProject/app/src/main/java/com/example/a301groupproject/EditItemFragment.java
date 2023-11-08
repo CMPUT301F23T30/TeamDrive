@@ -2,6 +2,7 @@ package com.example.a301groupproject;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class EditItemFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
 
+
     public EditItemFragment() {
     }
 
@@ -35,7 +37,36 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+        Bundle receivedBundle = getArguments();
 
+        if (receivedBundle != null) {
+            int receivedIntValue = (receivedBundle.getInt("loc"));
+
+            Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+
+            binding.itemNameInput.setText(i.getName());
+            binding.itemModelInput.setText(i.getModel());
+            binding.itemMakeInput.setText(i.getMake());
+            binding.itemDateInput.setText(i.getDate());
+            binding.estimatedValueInput.setText(i.getValue());
+
+            homeViewModel.emptyImages();
+            ArrayList<String> imageUris = i.getImages();
+            for(String uri :imageUris){
+                homeViewModel.addImage(Uri.parse(uri));
+
+            }
+
+            binding.deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    homeViewModel.removeItem(homeViewModel.getItems().getValue().get(receivedIntValue));
+                    NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+                    navController.navigateUp();
+
+                }
+            });
+        }
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,8 +86,16 @@ public class EditItemFragment extends Fragment {
                 }
 
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue);
-                homeViewModel.addItem(item, imageUris);
-                homeViewModel.emptyImages();
+                if(receivedBundle == null) {
+                    homeViewModel.addItem(item, imageUris);
+                    homeViewModel.emptyImages();
+                }
+                else {
+                    int receivedIntValue = (receivedBundle.getInt("loc"));
+                    Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+                    item.setId(i.getId());
+                    homeViewModel.editItem(item,imageUris);
+                }
 
                 // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
@@ -65,6 +104,7 @@ public class EditItemFragment extends Fragment {
         });
 
         binding.imageButton.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
