@@ -95,6 +95,7 @@ public class EditItemFragment extends Fragment {
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
                     homeViewModel.editItem(item,imageUris);
+                    homeViewModel.emptyImages();
                 }
 
                 // go back to home page after add confirm
