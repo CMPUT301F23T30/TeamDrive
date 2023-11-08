@@ -176,7 +176,8 @@
                 android:id="@+id/estimatedValueInput"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
-                android:background="#C3F4EAEA" />
+                android:background="#C3F4EAEA"
+                android:inputType="numberDecimal"/>
 
             <TextView
                 android:layout_width="match_parent"

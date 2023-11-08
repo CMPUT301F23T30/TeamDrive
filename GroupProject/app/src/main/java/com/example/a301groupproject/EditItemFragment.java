@@ -54,6 +54,8 @@ public class EditItemFragment extends Fragment {
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
 
+
+        //Tags function
         add_tag = view.findViewById(R.id.addtagbutton);
         itemTagInput = view.findViewById(R.id.itemTagInput) ;
         chipGroup = view.findViewById(R.id.chipgroup);
@@ -63,8 +65,6 @@ public class EditItemFragment extends Fragment {
             public void onClick(View v) {
                 String tagText = itemTagInput.getText().toString();
                 setChips(tagText);
-
-
             }
         });
 
@@ -168,6 +168,8 @@ public class EditItemFragment extends Fragment {
 
     }
 
+
+    //adding the tag into the list or remove it
     public void setChips(String e) {
         final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout,null,false);
         chip.setText(e);
