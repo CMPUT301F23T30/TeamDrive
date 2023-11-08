@@ -38,7 +38,6 @@ public class HomeViewModel extends ViewModel {
                 try {
                     total += Double.parseDouble(item.getValue());
                 } catch (NumberFormatException e) {
-                    // 在实际项目中你可能需要更合适的错误处理
                     e.printStackTrace();
                 }
             }

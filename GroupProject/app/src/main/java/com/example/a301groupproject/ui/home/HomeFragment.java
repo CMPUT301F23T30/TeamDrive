@@ -42,11 +42,11 @@ public class HomeFragment extends Fragment {
         itemAdapter = new ItemAdapter(itemList);
         recyclerView.setAdapter(itemAdapter);
 
-        // 在 HomeFragment 的 onCreateView 方法中添加按钮的监听器
+
         binding.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // 执行删除操作
+
                 deleteSelectedItems();
             }
         });
@@ -68,10 +68,10 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
     private void updateTotalValue() {
-        double totalValue = homeViewModel.calculateTotalValue(); // 调用 ViewModel 的方法来计算总价值
+        double totalValue = homeViewModel.calculateTotalValue();
         String formattedTotal = String.format(Locale.getDefault(), "Total Value: $%.2f", totalValue);
 
-        binding.totalValueTextView.setText(formattedTotal); // 更新 TextView 显示
+        binding.totalValueTextView.setText(formattedTotal);
     }
 
     private void deleteSelectedItems() {
@@ -81,9 +81,9 @@ public class HomeFragment extends Fragment {
                 itemsToRemove.add(item);
             }
         }
-        homeViewModel.getItems().getValue().removeAll(itemsToRemove); // 从 ViewModel 数据中移除选中的项目
-        homeViewModel.getItems().postValue(homeViewModel.getItems().getValue()); // 更新 LiveData
-        itemAdapter.notifyDataSetChanged(); // 通知适配器数据已更改
+        homeViewModel.getItems().getValue().removeAll(itemsToRemove);
+        homeViewModel.getItems().postValue(homeViewModel.getItems().getValue());
+        itemAdapter.notifyDataSetChanged();
     }
 
 }
