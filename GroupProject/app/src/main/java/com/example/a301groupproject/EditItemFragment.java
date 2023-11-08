@@ -35,6 +35,7 @@ public class EditItemFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private Uri imageUri;
+    
 
     EditText itemTagInput;
     Button add_tag;
@@ -83,13 +84,23 @@ public class EditItemFragment extends Fragment {
             binding.inputYear.setText(year_month_day[0]);
             binding.inputMonth.setText(year_month_day[1]);
             binding.inputDay.setText(year_month_day[2]);
+            binding.serialNumberInput.setText(i.getSerialNumber());
             binding.estimatedValueInput.setText(i.getValue());
+            binding.descriptionInput.setText(i.getDescription());
+            binding.commentInput.setText(i.getComment());
 
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
             for (String uri : imageUris) {
                 homeViewModel.addImage(Uri.parse(uri));
             }
+
+                chipGroup.removeAllViews();
+                tagList.clear();
+                ArrayList<String> tags = i.getTags();
+                for(String tag:tags){
+                    setChips(tag);
+                }
 
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,6 +111,8 @@ public class EditItemFragment extends Fragment {
 
                 }
             });
+        }else {
+            binding.deleteButton.setVisibility(View.INVISIBLE);
         }
 
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
@@ -214,12 +227,12 @@ public class EditItemFragment extends Fragment {
     public void setChips(String e) {
         final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout, null, false);
         chip.setText(e);
-        chip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tagList.add(e);
-            }
-        });
+//        chip.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                tagList.add(e);
+//            }
+//        });
         chip.setOnCloseIconClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,6 +240,7 @@ public class EditItemFragment extends Fragment {
                 tagList.remove(e);
             }
         });
+        tagList.add(e);
         chipGroup.addView(chip);
 
     }
