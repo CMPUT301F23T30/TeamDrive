@@ -45,11 +45,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         holder.dateTextView.setText(item.getDate());
         holder.valueTextView.setText(item.getValue());
 
-
-        holder.checkBox.setOnCheckedChangeListener(null);
-        holder.checkBox.setChecked(item.isChecked());
+        // 在您的 ItemAdapter 的 onBindViewHolder 方法内部
+        holder.checkBox.setOnCheckedChangeListener(null); // 先置为null，以避免旧的监听器干扰
+        holder.checkBox.setChecked(item.isChecked()); // 设置当前的勾选状态
 
         holder.checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // 更新您的 Item 对象的 isChecked 状态
             item.setChecked(isChecked);
         });
     }
