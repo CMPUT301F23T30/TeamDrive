@@ -117,7 +117,7 @@
 
             <Button
                 android:id="@+id/imageButton"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FFD700"
                 android:layout_marginTop="20dp"
@@ -127,16 +127,17 @@
 
             <Button
                 android:id="@+id/confirmButton"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#ADD8E6"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="5dp"
                 android:layout_gravity="center"
                 android:text="Confirm" />
 
             <Button
                 android:id="@+id/deleteButton"
-                android:layout_width="250dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:backgroundTint="#FF0000"
                 android:layout_gravity="center"

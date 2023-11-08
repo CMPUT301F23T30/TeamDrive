@@ -1,65 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E5B5B5">
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/image_fragment_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:gravity="center"
-        android:padding="8dp"
-        android:text="Images"
-        android:textSize="30sp"
-        android:textStyle="bold" />
-
-    <GridView
-        android:id="@+id/images"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/buttonWrapper"
-        android:layout_below="@id/image_fragment_title"
-        android:horizontalSpacing="5dp"
-        android:numColumns="1"
-        android:padding="10dp"
-        android:verticalSpacing="5dp" />
-
-    <LinearLayout
-        android:id="@+id/buttonWrapper"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/cameraButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="5dp"
-            android:backgroundTint="#8A2BE2"
-            android:text="Take pictures" />
-
-        <Button
-            android:id="@+id/albumButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#90EE90"
-            android:layout_marginBottom="5dp"
-            android:text="Select From Album" />
-
-
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="#808080"
-            android:layout_marginBottom="5dp"
-            android:text="Confirm" />
-
-    </LinearLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
