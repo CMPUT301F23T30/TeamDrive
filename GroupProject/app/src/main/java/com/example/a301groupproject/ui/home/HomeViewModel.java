@@ -72,6 +72,9 @@ public class HomeViewModel extends ViewModel {
         itemData.put("make", item.getMake());
         itemData.put("date", item.getDate());
         itemData.put("value", item.getValue());
+        itemData.put("serialNumber",item.getSerialNumber());
+        itemData.put("description",item.getDescription());
+        itemData.put("comment",item.getComment());
         itemData.put("images", imageUris);
         itemData.put("Tags",item.getTags());
 
@@ -100,7 +103,11 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("make", item.getMake());
         updatedData.put("date", item.getDate());
         updatedData.put("value", item.getValue());
+        updatedData.put("serialNumber",item.getSerialNumber());
+        updatedData.put("description",item.getDescription());
+        updatedData.put("comment",item.getComment());
         updatedData.put("images", imageUris);
+        updatedData.put("Tags",item.getTags());
         itemRef.set(updatedData);
     }
 
