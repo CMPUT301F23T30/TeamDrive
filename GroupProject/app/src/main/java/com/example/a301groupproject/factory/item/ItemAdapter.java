@@ -9,14 +9,18 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a301groupproject.R;
+import com.example.a301groupproject.ui.home.RvInterface;
 
 import java.util.ArrayList;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
+    private final RvInterface rvInterface;
     private ArrayList<Item> items;
 
-    public ItemAdapter(ArrayList<Item> items) {
+    public ItemAdapter(ArrayList<Item> items,RvInterface rvInterface) {
+
         this.items = items;
+        this.rvInterface = rvInterface;
     }
 
     public ArrayList<Item> getItems() {
@@ -31,7 +35,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.individual_item, parent, false);
-        return new ViewHolder(view);
+        return new ViewHolder(view,rvInterface);
     }
 
     @Override
@@ -56,13 +60,27 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         public TextView dateTextView;
         public TextView valueTextView;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView,RvInterface rvInterface) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.item_name);
             modelTextView = itemView.findViewById(R.id.item_model);
             makeTextView = itemView.findViewById(R.id.item_make);
             dateTextView = itemView.findViewById(R.id.item_date);
             valueTextView = itemView.findViewById(R.id.item_value);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(rvInterface != null){
+                        int pos = getAdapterPosition();
+
+                        if(pos != RecyclerView.NO_POSITION){
+                            rvInterface.onItemClick(pos);
+                        }
+
+                    }
+                }
+            });
         }
     }
 

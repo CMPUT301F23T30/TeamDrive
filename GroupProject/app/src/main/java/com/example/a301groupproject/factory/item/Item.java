@@ -9,6 +9,7 @@ public class Item implements Serializable {
     private String make;
     private String date;
     private String value;
+    private String id;
 
 
     public Item(String name, String model, String make, String date, String value) {
@@ -60,5 +61,13 @@ public class Item implements Serializable {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
