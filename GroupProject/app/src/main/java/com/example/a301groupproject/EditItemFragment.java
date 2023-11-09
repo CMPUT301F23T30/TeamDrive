@@ -97,19 +97,19 @@ public class EditItemFragment extends Fragment {
             binding.estimatedValueInput.setText(i.getValue());
             binding.descriptionInput.setText(i.getDescription());
             binding.commentInput.setText(i.getComment());
-
+            // TODO: only support the viewing of images when checking the detail of an item record
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
             for (String uri : imageUris) {
                 homeViewModel.addImage(Uri.parse(uri));
             }
 
-                chipGroup.removeAllViews();
-                tagList.clear();
-                ArrayList<String> tags = i.getTags();
-                for(String tag:tags){
-                    setChips(tag);
-                }
+            chipGroup.removeAllViews();
+            tagList.clear();
+            ArrayList<String> tags = i.getTags();
+            for(String tag:tags){
+                setChips(tag);
+            }
 
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -99,6 +99,7 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("comment",item.getComment());
         updatedData.put("images", imageUris);
         updatedData.put("tags",item.getTags());
+        // Set the updated data in the Firestore document
         itemRef.set(updatedData);
     }
     public double calculateTotalValue() {
