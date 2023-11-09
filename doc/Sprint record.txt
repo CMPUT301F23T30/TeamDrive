@@ -1,0 +1,53 @@
+sprint Goal: complete about half of the user stories.
+Duration: Oct 23th to Nov 08th
+
+Recording:
+
+Week1:
+Oct 24th: 1st sprint meeting with TA
+	All members were presented. 
+	TA clarifies the problems in the User Interface Mockup.
+
+	The basic theme of the app is confirmed
+	UI mockup is changed and improved in Figma
+	Every group member is assigned their responsibility for user stories
+			
+		Work setup:
+		Steven Xu: The user has a unique username and password
+		Yang Guo: define and create the item with the date of purchase or acquisition, brief description, make, model, serial number, estimated value, and comment
+		Weijia Chen: Show the list of stored items and Batch deletion
+		Haoyu Zheng: View, edit, and delete on a single record
+		Dian Huang: define one or more tags for a record
+		Xiangpeng Ji: take photos or use album photos to attach them to the item record. Deleting the photo
+
+	
+
+Week2:
+Oct 31st: 2nd sprint meeting with TA
+	All members were presented.
+	The basic structure of the app is created
+
+	(before meeting)Work done:
+		Steven Xu: The use of the Login interface, the user can sign in or sign up with email and password
+		Yang Guo: define the item with all the info it needs
+		Weijia Chen: create the list of stored items
+		Haoyu Zheng: set the clicking function of the time list to view its details, set the edit with its basic info
+		Dian Huang: define one or more tags for a record
+		Xiangpeng Ji: take photos to attach them on creating the item record and delete the photo
+
+Week3:
+Nov 7th: 3rd sprint meeting with TA
+	All members were presented.
+	Showing a brief Operation process to TA with the basic workflow of the app
+	(before meeting)Work done:
+		Steven Xu: Linking the user profile to Firebase
+		Yang Guo: creating and adding the function of the new items, setting the basic input constraints, linking to Firebase
+		Weijia Chen: using the checkbox to batch delete the item records
+		Haoyu Zheng: set the delete function for a single item, adding the support of tag viewing, editing, and image viewing, linking to Firebase
+		Dian Huang: delete the tags after it is defined.
+		Xiangpeng Ji: add the authority of getting images from album
+
+	The project is fully merged after the 3rd sprint meeting.
+	
+	At the end of the week, testing and Javadoc support is done
+	//TODO: still need further specific input constraints for inputting item data. Further editing and deletion of image function need to be implemented
