@@ -86,13 +86,22 @@ public class HomeViewModel extends ViewModel {
         }
     }
 
-    // TODO: need to be rewritten
+    /**
+     * Remove an item in the Firestore database with the provided data.
+     *
+     * @param item The item to be remove by identify its unique id in the Firebase
+     */
     public void removeItem(Item item) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         db.collection("users").document(user.getUid()).collection("items").document(item.getId()).delete();
     }
-
+    /**
+     * Edits an item in the Firestore database with the provided data.
+     *
+     * @param item       The item to be edited, containing updated information.
+     * @param imageUris  The list of image URIs associated with the item.
+     */
     public void editItem(Item item,ArrayList<String> imageUris) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -108,6 +117,7 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("comment",item.getComment());
         updatedData.put("images", imageUris);
         updatedData.put("tags",item.getTags());
+        // Set the updated data in the Firestore document
         itemRef.set(updatedData);
     }
 
