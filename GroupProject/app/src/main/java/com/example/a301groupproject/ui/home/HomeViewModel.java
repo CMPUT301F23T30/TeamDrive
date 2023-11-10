@@ -5,9 +5,11 @@ import android.net.Uri;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.a301groupproject.factory.item.Item;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -26,8 +28,6 @@ public class HomeViewModel extends ViewModel {
         return images;
     }
 
-    
-
     public void addImage(Uri uri) {
         ArrayList<Uri> imagesValue = images.getValue();
         imagesValue.add(uri);
@@ -37,7 +37,26 @@ public class HomeViewModel extends ViewModel {
     public void emptyImages() {
         images.setValue(new ArrayList<>());
     }
+
     public MutableLiveData<ArrayList<Item>> getItems() {
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String uid = user.getUid();
+            db.collection("users").document(uid).collection("items")
+                    .addSnapshotListener((snapshots, e) -> {
+                        ArrayList<Item> itemList = new ArrayList<>();
+                        if (snapshots != null) {
+                            for (DocumentSnapshot doc : snapshots) {
+                                Item item = doc.toObject(Item.class);
+                                item.setId(doc.getId());
+                                itemList.add(item);
+                            }
+                            items.setValue(itemList);
+                        }
+                    });
+        }
+
         return items;
     }
 
@@ -101,6 +120,7 @@ public class HomeViewModel extends ViewModel {
         // Set the updated data in the Firestore document
         itemRef.set(updatedData);
     }
+
     public double calculateTotalValue() {
         double total = 0.0;
         ArrayList<Item> itemsList = items.getValue();
