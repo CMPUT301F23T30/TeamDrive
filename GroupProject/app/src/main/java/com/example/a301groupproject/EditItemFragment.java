@@ -36,7 +36,7 @@ public class EditItemFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private Uri imageUri;
-
+    
 
     EditText itemTagInput;
     Button add_tag;
@@ -66,6 +66,19 @@ public class EditItemFragment extends Fragment {
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         Bundle receivedBundle = getArguments();
+
+        //Tags function
+        add_tag = view.findViewById(R.id.addtagbutton);
+        itemTagInput = view.findViewById(R.id.itemTagInput);
+        chipGroup = view.findViewById(R.id.chipgroup);
+
+        add_tag.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String tagText = itemTagInput.getText().toString();
+                setChips(tagText);
+            }
+        });
 
         if (receivedBundle != null) {
             int receivedIntValue = (receivedBundle.getInt("loc"));

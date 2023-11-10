@@ -120,7 +120,7 @@ public class ImageFragment extends Fragment {
         });
         return view;
     }
-    
+
     /**
      * Handles the results getting from the camera and album selection.
      * Update the image date and notify image adapter
@@ -176,4 +176,3 @@ public class ImageFragment extends Fragment {
         return newImageUri;
     }
 }
-
