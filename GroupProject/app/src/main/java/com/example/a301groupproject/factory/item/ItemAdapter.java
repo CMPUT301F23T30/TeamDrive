@@ -18,6 +18,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
     private final RvInterface rvInterface;
     private ArrayList<Item> items;
 
+    /**
+     * Constructs an ItemAdapter with a list of items and a RecyclerView interface for item click events.
+     *
+     * @param items       The list of items to be displayed in the adapter.
+     * @param rvInterface The RecyclerView interface for handling item click events.
+     */
     public ItemAdapter(ArrayList<Item> items,RvInterface rvInterface) {
 
         this.items = items;
@@ -69,6 +75,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
         public TextView dateTextView;
         public TextView valueTextView;
 
+        /**
+         * Constructs a ViewHolder for items in a RecyclerView with associated views and a RecyclerView interface for item click events.
+         *
+         * @param itemView     The root view representing an item in the RecyclerView.
+         * @param rvInterface  The RecyclerView interface for handling item click events.
+         */
         public ViewHolder(View itemView,RvInterface rvInterface) {
             super(itemView);
             checkBox = itemView.findViewById(R.id.checkbox);

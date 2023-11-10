@@ -26,6 +26,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+/**
+ * This is a Fragment that handle the add,edit and delete of an single item record
+ */
 
 public class EditItemFragment extends Fragment {
 
@@ -42,10 +45,19 @@ public class EditItemFragment extends Fragment {
     String input;
     private Object e;
 
-
+    /**
+     * Default constructor for the EditItemFragment.
+     */
     public EditItemFragment() {
     }
-
+    /**
+     * Inflates the fragment's view and initializes its components.
+     *
+     * @param inflater           The layout inflater.
+     * @param container          The parent view that the fragment's UI should be attached to.
+     * @param savedInstanceState  A saved state bundle.
+     * @return                   The inflated view of the fragment.
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -86,19 +98,19 @@ public class EditItemFragment extends Fragment {
             binding.estimatedValueInput.setText(i.getValue());
             binding.descriptionInput.setText(i.getDescription());
             binding.commentInput.setText(i.getComment());
-
+            // TODO: only support the viewing of images when checking the detail of an item record
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
             for (String uri : imageUris) {
                 homeViewModel.addImage(Uri.parse(uri));
             }
 
-                chipGroup.removeAllViews();
-                tagList.clear();
-                ArrayList<String> tags = i.getTags();
-                for(String tag:tags){
-                    setChips(tag);
-                }
+            chipGroup.removeAllViews();
+            tagList.clear();
+            ArrayList<String> tags = i.getTags();
+            for(String tag:tags){
+                setChips(tag);
+            }
 
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -221,7 +233,11 @@ public class EditItemFragment extends Fragment {
     }
 
 
-    //adding the tag into the list or remove it
+    /**
+     * Sets a chip with the specified text in the chip group for tags.
+     *
+     * @param e  The text to set in the chip.
+     */
     public void setChips(String e) {
         final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout, null, false);
         chip.setText(e);
