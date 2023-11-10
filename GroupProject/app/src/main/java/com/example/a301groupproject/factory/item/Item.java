@@ -11,12 +11,14 @@ public class Item implements Serializable {
     private String date;
     private String serialNumber;
     private String value;
+    private ArrayList<String> tags;
     private String description;
     private String comment;
     private String id;
     private ArrayList<String> images;
+    private boolean isChecked;
 
-    public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment) {
+    public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment, ArrayList<String> tags) {
         this.name = name;
         this.model = model;
         this.make = make;
@@ -25,6 +27,7 @@ public class Item implements Serializable {
         this.serialNumber = serialNumber;
         this.description = description;
         this.comment = comment;
+        this.tags = tags;
     }
 
     public Item() {
@@ -37,6 +40,15 @@ public class Item implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+
 
     public String getModel() {
         return model;
@@ -83,6 +95,14 @@ public class Item implements Serializable {
         this.comment = comment;
     }
 
+    public ArrayList<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(ArrayList<String> tags) {
+        this.tags = tags;
+    }
+  
     public String getId() {
         return id;
     }
