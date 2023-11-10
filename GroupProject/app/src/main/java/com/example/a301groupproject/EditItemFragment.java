@@ -17,7 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
-import com.example.a301groupproject.factory.Item;
+import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
@@ -36,7 +36,7 @@ public class EditItemFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private Uri imageUri;
-    
+
 
     EditText itemTagInput;
     Button add_tag;
@@ -65,19 +65,7 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-
-        //Tags function
-        add_tag = view.findViewById(R.id.addtagbutton);
-        itemTagInput = view.findViewById(R.id.itemTagInput);
-        chipGroup = view.findViewById(R.id.chipgroup);
-
-        add_tag.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String tagText = itemTagInput.getText().toString();
-                setChips(tagText);
-            }
-        });
+        Bundle receivedBundle = getArguments();
 
         if (receivedBundle != null) {
             int receivedIntValue = (receivedBundle.getInt("loc"));
@@ -123,6 +111,7 @@ public class EditItemFragment extends Fragment {
         }else {
             binding.deleteButton.setVisibility(View.INVISIBLE);
         }
+
         binding.confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             // not done with the limits
@@ -209,11 +198,11 @@ public class EditItemFragment extends Fragment {
                     int receivedIntValue = (receivedBundle.getInt("loc"));
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
                     item.setId(i.getId());
-                    homeViewModel.editItem(item, imageUris);
                     homeViewModel.editItem(item,imageUris);
                     homeViewModel.emptyImages();
                 }
 
+                // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigateUp();
             }

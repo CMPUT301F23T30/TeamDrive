@@ -12,8 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a301groupproject.databinding.FragmentHomeBinding;
-import com.example.a301groupproject.factory.Item;
-import com.example.a301groupproject.factory.ItemAdapter;
 
 import java.util.ArrayList;
 import java.util.Locale;
