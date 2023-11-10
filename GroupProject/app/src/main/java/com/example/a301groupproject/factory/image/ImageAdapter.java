@@ -11,30 +11,65 @@ import com.example.a301groupproject.R;
 
 import java.util.ArrayList;
 
+/**
+ * ImageAdapter for showing images in GridView component.
+ */
 public class ImageAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Image> images;
 
+    /**
+     * Constructor for the ImageAdapter with a context and images list.
+     *
+     * @param context Current Context
+     * @param images  Image List
+     */
     public ImageAdapter(Context context, ArrayList<Image> images) {
         this.context = context;
         this.images = images;
     }
 
+    /**
+     * Override method: get # of images
+     *
+     * @return # of images.
+     */
     @Override
     public int getCount() {
         return images.size();
     }
 
+    /**
+     * Get the image in the specific position
+     *
+     * @param position image index
+     * @return The data at the specified position.
+     */
     @Override
     public Object getItem(int position) {
         return images.get(position);
     }
 
+    /**
+     * Get the index
+     *
+     * @param position image index
+     * @return image index
+     */
     @Override
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * View for displaying the image and delete button at the right corner
+     * Set delete button onclick listener to delete corresponding image
+     *
+     * @param position    image index
+     * @param convertView
+     * @param parent
+     * @return Show the new View composed of image and delete button at the top right corner
+     */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null) {

@@ -32,6 +32,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * Fragment for showing images. Users can add images by taking photos or
+ * selecting from gallery. Confirm their selection by clicking the
+ * confirm button
+ */
 public class ImageFragment extends Fragment {
     private ArrayList<Image> images = new ArrayList<>();
     private ImageAdapter imageAdapter;
@@ -39,10 +44,24 @@ public class ImageFragment extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int TAKE_IMAGE_REQUEST = 2;
 
+    /**
+     * Default no-arg constructor for ImageFragment
+     */
     public ImageFragment() {
 
     }
 
+    /**
+     * Inflates the layout for this fragment, initializes the GridView with image adapter,
+     * set 3 button onclick listener: camera, album, and confirm to listen taking picture action,
+     * Album selection action and confirm action.
+     * Navigate to the previous fragment (add) if click confirm
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return Return the view
+     */
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -102,6 +121,15 @@ public class ImageFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Handles the results getting from the camera and album selection.
+     * Update the image date and notify image adapter
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -117,6 +145,12 @@ public class ImageFragment extends Fragment {
         }
     }
 
+    /**
+     * Create a file URI for storing images from the camera
+     * The URI is used to store the selected images
+     *
+     * @return A new Uri object
+     */
     private Uri createFileUri() {
         Uri newImageUri = null;
 

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.a301groupproject.LoginActivity;
 import com.example.a301groupproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +27,16 @@ public class SignUpFragment extends Fragment {
     private FirebaseAuth mAuth;
     private FirebaseFirestore mFirestore;
 
+
+    /**
+     * Inflates the layout for this fragment, initializes FirebaseAuth and FirebaseFirestore instances,
+     * and sets up click listeners for the sign-up process and navigation back to the login screen.
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return Returns the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,8 +84,8 @@ public class SignUpFragment extends Fragment {
                                 } else {
                                     createUserWithEmailAndUsername(email, password, username);
                                     getParentFragmentManager().beginTransaction()
-                                            .replace(R.id.fragment_container, new LoginFragment()) // assuming 'fragment_container' is the ID of your FrameLayout in LoginActivity's layout
-                                            .addToBackStack(null)  // this allows you to navigate back to the LoginFragment by pressing the back button
+                                            .replace(R.id.fragment_container, new LoginFragment())
+                                            .addToBackStack(null)
                                             .commit();
                                 }
                             })
@@ -90,10 +101,25 @@ public class SignUpFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Checks if the email entered by the user is valid.
+     *
+     * @param email The email CharSequence to validate.
+     * @return Returns true if the email is not empty and matches the email pattern, false otherwise.
+     */
     private boolean isValidEmail(CharSequence email) {
         return (!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches());
     }
 
+    /**
+     * Attempts to create a new user with the specified email and password, and then calls
+     * {@link #saveUserToFirestore(String, String)} if successful.
+     * If unsuccessful, will notify user signup has failed
+     *
+     * @param email    The user's email address.
+     * @param password The user's chosen password.
+     * @param username The user's chosen username.
+     */
     private void createUserWithEmailAndUsername(String email, String password, String username) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
@@ -105,6 +131,12 @@ public class SignUpFragment extends Fragment {
                 });
     }
 
+    /**
+     * Saves the username and email of the newly created user to Firestore.
+     *
+     * @param username The username of the new user.
+     * @param email    The email of the new user.
+     */
     private void saveUserToFirestore(String username, String email) {
         Map<String, Object> user = new HashMap<>();
         user.put("username", username);

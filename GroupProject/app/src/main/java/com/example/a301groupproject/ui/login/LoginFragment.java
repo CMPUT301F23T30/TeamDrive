@@ -23,6 +23,18 @@ import com.google.firebase.auth.FirebaseAuth;
 public class LoginFragment extends Fragment {
     private FirebaseAuth mAuth;
 
+    /**
+     * Inflates the layout for this fragment, initializes Firebase authentication,
+     * and sets up click listeners for the login and sign-up process.
+     * If user enters email and password correctly, user will be able to get into home screen
+     * If user enters either incorrectly, unable to login
+     * If user don't have an account, they will be redirected to a signup page to perform signup action
+     *
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return Returns the View for the fragment's UI, or null.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
