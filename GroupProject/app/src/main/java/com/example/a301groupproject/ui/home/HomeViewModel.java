@@ -16,6 +16,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * ViewModel to manage UI-related data in the lifecycle of the HomeFragment. It offers an interface to interact with the Firestore database,
+ * to add, remove, and edit items, and to manage image URIs for items. It abstracts the data management from the HomeFragment,
+ * allowing for a separation of concerns and easier testing.
+ */
 public class HomeViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Item>> items = new MutableLiveData<>(new ArrayList<>());
 
@@ -23,21 +28,33 @@ public class HomeViewModel extends ViewModel {
 
     private FirebaseFirestore db;
     private FirebaseUser user;
-
+    /**
+     * Retrieves the live data instance containing the list of image URIs.
+     * @return The MutableLiveData object containing the list of image URIs.
+     */
     public MutableLiveData<ArrayList<Uri>> getImages() {
         return images;
     }
-
+    /**
+     * Adds a new image URI to the existing list of image URIs in the MutableLiveData.
+     * @param uri The new image URI to add to the list.
+     */
     public void addImage(Uri uri) {
         ArrayList<Uri> imagesValue = images.getValue();
         imagesValue.add(uri);
         images.setValue(imagesValue);
     }
-
+    /**
+     * Clears the list of image URIs, setting an empty list in the MutableLiveData.
+     */
     public void emptyImages() {
         images.setValue(new ArrayList<>());
     }
-
+    /**
+     * Gets the live data list of items. It initializes or updates the list of items from Firestore
+     * when changes occur. It listens to the Firestore snapshot updates and keeps the items list updated.
+     * @return The MutableLiveData object containing the current list of items.
+     */
     public MutableLiveData<ArrayList<Item>> getItems() {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -60,7 +77,11 @@ public class HomeViewModel extends ViewModel {
         return items;
     }
 
-    // add to database
+    /**
+     * Adds a new item to the Firestore database. It compiles the item data into a map and uploads it to the database.
+     * @param item The item to add to the database.
+     * @param imageUris The list of strings representing image URIs to associate with the item.
+     */
     public void addItem(Item item, ArrayList<String> imageUris) {
         db = FirebaseFirestore.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -121,6 +142,11 @@ public class HomeViewModel extends ViewModel {
         itemRef.set(updatedData);
     }
 
+    /**
+     * Calculates the total value of all items by summing their individual values.
+     * Handles NumberFormatException if a value is not a valid double.
+     * @return The total value of all items as a double.
+     */
     public double calculateTotalValue() {
         double total = 0.0;
         ArrayList<Item> itemsList = items.getValue();

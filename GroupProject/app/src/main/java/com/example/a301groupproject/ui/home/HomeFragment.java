@@ -22,6 +22,11 @@ import com.example.a301groupproject.factory.item.ItemAdapter;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * HomeFragment is the main UI controller that users interact with for listing, deleting, and managing items.
+ * It hosts a RecyclerView to display the list of items and integrates with HomeViewModel for data handling.
+ * This fragment allows users to perform actions such as delete and view item details, with changes observed in real-time.
+ */
 public class HomeFragment extends Fragment implements RvInterface {
 
     private FragmentHomeBinding binding;
@@ -34,6 +39,15 @@ public class HomeFragment extends Fragment implements RvInterface {
 
     private HomeViewModel homeViewModel;
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This method inflates the layout
+     * for the fragment's view and initializes RecyclerView with an adapter.
+     *
+     * @param inflater           LayoutInflater object to inflate views in the fragment
+     * @param container          Parent view that the fragment's UI should be attached to
+     * @param savedInstanceState If non-null, this fragment is being reconstructed from a previous saved state
+     * @return The root View for the fragment's UI, or null
+     */
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
@@ -63,12 +77,20 @@ public class HomeFragment extends Fragment implements RvInterface {
         return root;
     }
 
+    /**
+     * Called when the view hierarchy associated with the fragment is being removed. This ensures the binding
+     * is cleaned up to prevent memory leaks.
+     */
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
     }
 
+    /**
+     * Updates the total value displayed in the TextView by calculating the total value of items
+     * and formatting it as a currency string.
+     */
     private void updateTotalValue() {
         double totalValue = homeViewModel.calculateTotalValue();
         String formattedTotal = String.format(Locale.getDefault(), "Total Value: $%.2f", totalValue);
@@ -76,6 +98,10 @@ public class HomeFragment extends Fragment implements RvInterface {
         binding.totalValueTextView.setText(formattedTotal);
     }
 
+    /**
+     * Deletes the selected items from the adapter and the database by checking the items that are marked
+     * and using the HomeViewModel to remove them from the backend.
+     */
     private void deleteSelectedItems() {
         ArrayList<Item> itemsToRemove = new ArrayList<>();
         for (Item item : homeViewModel.getItems().getValue()) {
@@ -89,6 +115,12 @@ public class HomeFragment extends Fragment implements RvInterface {
 
     }
 
+    /**
+     * Handles item click events by logging the clicked position and navigating to the item addition
+     * screen with the item's position passed as an argument for potential editing.
+     *
+     * @param position The position of the clicked item in the RecyclerView.
+     */
     @Override
     public void onItemClick(int position) {
         Log.d("MyTag", "The clicking position is: " + position);
