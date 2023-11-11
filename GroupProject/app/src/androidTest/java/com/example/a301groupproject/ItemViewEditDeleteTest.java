@@ -76,6 +76,9 @@ public class ItemViewEditDeleteTest {
         onView(withId(R.id.commentInput)).perform(ViewActions.typeText("ok"));
         onView(withId(R.id.commentInput)).perform(ViewActions.closeSoftKeyboard());
 
+        onView(withId(R.id.itemTagInput)).perform(ViewActions.typeText("love"));
+        onView(withId(R.id.addtagbutton)).perform(click());
+
         onView(withId(R.id.confirmButton)).perform(click());
         try {
             Thread.sleep(1000);
@@ -110,6 +113,8 @@ public class ItemViewEditDeleteTest {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        //onView(withId(R.id.chipgroup))
         onView(withId(R.id.confirmButton)).perform(click());
 
         onView(withId(R.id.recycle_view))
