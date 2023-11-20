@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort">
+        <item>date↑</item>
+        <item>date↓</item>
+        <item>description↑</item>
+        <item>description↓</item>
+        <item>make↑</item>
+        <item>make↓</item>
+        <item>value↑</item>
+        <item>value↓</item>
+    </string-array>
+
+</resources>

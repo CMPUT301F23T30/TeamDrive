@@ -5,6 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,6 +18,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a301groupproject.MainActivity;
 import com.example.a301groupproject.R;
 import com.example.a301groupproject.databinding.FragmentHomeBinding;
 import com.example.a301groupproject.factory.item.Item;
@@ -64,6 +69,20 @@ public class HomeFragment extends Fragment implements RvInterface {
             @Override
             public void onClick(View v) {
                 deleteSelectedItems();
+            }
+        });
+        //add the basic spinner to the sort function
+        Spinner spinner = binding.SpinnerSort;
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedValue = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
 
@@ -129,4 +148,7 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
+
+
+
 }
