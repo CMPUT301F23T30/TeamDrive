@@ -84,7 +84,7 @@ public class EditItemFragment extends Fragment {
         if (receivedBundle != null) {
             int receivedIntValue = (receivedBundle.getInt("loc"));
             //build a new item from the homeViewModel which contains the info of item to be view/edit
-            Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+            Item i = homeViewModel.getTheItems().getValue().get(receivedIntValue);
 
             String date = i.getDate();
             String[] year_month_day = date.split("-");

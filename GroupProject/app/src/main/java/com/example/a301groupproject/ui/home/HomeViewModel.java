@@ -13,6 +13,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,6 +78,30 @@ public class HomeViewModel extends ViewModel {
 
         return items;
     }
+
+    public  MutableLiveData<ArrayList<Item>> getTheItems(){
+        return this.items;
+    }
+    public void setItemsValue(ArrayList<Item> i){
+        items.setValue(i);
+    }
+
+//    public void sortItem(String sorter){
+//        Collections.sort(items.getValue(), new Comparator<Item>(){
+//
+//            @Override
+//            public int compare(Item o1, Item o2) {
+//                if (sorter.equalsIgnoreCase("date↑"))
+//                    return o1.getDate().compareToIgnoreCase(o2.getDate());
+//                else if (sorter.equalsIgnoreCase("date↓")) {
+//                    return o2.getDate().compareToIgnoreCase(o1.getDate());
+//                }
+//
+//                return 0;
+//            }
+//        });
+//    }
+
 
     /**
      * Adds a new item to the Firestore database. It compiles the item data into a map and uploads it to the database.

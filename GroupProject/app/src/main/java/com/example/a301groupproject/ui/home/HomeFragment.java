@@ -25,6 +25,8 @@ import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.factory.item.ItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 /**
@@ -43,6 +45,7 @@ public class HomeFragment extends Fragment implements RvInterface {
     private ItemAdapter itemAdapter;
 
     private HomeViewModel homeViewModel;
+
 
     /**
      * Called to have the fragment instantiate its user interface view. This method inflates the layout
@@ -72,25 +75,32 @@ public class HomeFragment extends Fragment implements RvInterface {
             }
         });
         //add the basic spinner to the sort function
-        Spinner spinner = binding.SpinnerSort;
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedValue = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getItems().observe(getViewLifecycleOwner(), items -> {
             itemAdapter.setItems(items);
             itemAdapter.notifyDataSetChanged();
             updateTotalValue();
+        });
+
+        Spinner spinner = binding.SpinnerSort;
+        String sorter = spinner.getSelectedItem().toString();
+        Toast.makeText(getContext(),sorter,Toast.LENGTH_SHORT).show();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedValue = parent.getItemAtPosition(position).toString();
+                //Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
+                sortItem(selectedValue);
+                itemAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
 
         return root;
@@ -148,7 +158,24 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
+    public void sortItem(String sorter){
 
+        ArrayList<Item> sortedArray = homeViewModel.getTheItems().getValue();
+        Collections.sort(sortedArray, new Comparator<Item>(){
+
+            @Override
+            public int compare(Item o1, Item o2) {
+                if (sorter.equalsIgnoreCase("date↑"))
+                    return o1.getDate().compareToIgnoreCase(o2.getDate());
+                else if (sorter.equalsIgnoreCase("date↓")) {
+                    return o2.getDate().compareToIgnoreCase(o1.getDate());
+                }
+
+                return 0;
+            }
+        });
+        homeViewModel.setItemsValue(sortedArray);
+    }
 
 
 }
