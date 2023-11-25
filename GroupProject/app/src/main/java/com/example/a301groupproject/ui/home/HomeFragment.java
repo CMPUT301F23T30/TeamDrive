@@ -5,6 +5,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -14,12 +18,15 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.a301groupproject.MainActivity;
 import com.example.a301groupproject.R;
 import com.example.a301groupproject.databinding.FragmentHomeBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.factory.item.ItemAdapter;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 
 /**
@@ -38,6 +45,7 @@ public class HomeFragment extends Fragment implements RvInterface {
     private ItemAdapter itemAdapter;
 
     private HomeViewModel homeViewModel;
+
 
     /**
      * Called to have the fragment instantiate its user interface view. This method inflates the layout
@@ -66,12 +74,32 @@ public class HomeFragment extends Fragment implements RvInterface {
                 deleteSelectedItems();
             }
         });
+        //add the basic spinner to the sort function
+
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getItems().observe(getViewLifecycleOwner(), items -> {
             itemAdapter.setItems(items);
             itemAdapter.notifyDataSetChanged();
             updateTotalValue();
+        });
+
+        Spinner spinner = binding.SpinnerSort;
+        String sorter = spinner.getSelectedItem().toString();
+
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedValue = parent.getItemAtPosition(position).toString();
+                Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
+                sortItem(selectedValue);
+                itemAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
         });
 
         return root;
@@ -129,4 +157,45 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
+    public void sortItem(String sorter){
+
+        ArrayList<Item> sortedArray = homeViewModel.getTheItems().getValue();
+        Collections.sort(sortedArray, new Comparator<Item>(){
+
+            @Override
+            public int compare(Item o1, Item o2) {
+                if (sorter.equalsIgnoreCase("date↑"))
+                    return o1.getDate().compareToIgnoreCase(o2.getDate());
+                else if (sorter.equalsIgnoreCase("date↓")) {
+                    return o2.getDate().compareToIgnoreCase(o1.getDate());
+                }
+
+                else if (sorter.equalsIgnoreCase("description↑"))
+                    return o1.getDescription().compareToIgnoreCase(o2.getDescription());
+                else if (sorter.equalsIgnoreCase("description↓")) {
+                    return o2.getDescription().compareToIgnoreCase(o1.getDescription());
+                }
+
+                else if (sorter.equalsIgnoreCase("make↑"))
+                    return o1.getMake().compareToIgnoreCase(o2.getMake());
+                else if (sorter.equalsIgnoreCase("make↓")) {
+                    return o2.getMake().compareToIgnoreCase(o1.getMake());
+                }
+
+                else if (sorter.equalsIgnoreCase("value↑"))
+                    return o1.getValue().compareToIgnoreCase(o2.getValue());
+                else if (sorter.equalsIgnoreCase("value↓")) {
+                    return o2.getValue().compareToIgnoreCase(o1.getValue());
+                }
+
+                else if (sorter.equalsIgnoreCase("tag"))
+                    return Integer.compare(o2.getTagsSize(),o1.getTagsSize());
+
+                return 0;
+            }
+        });
+        homeViewModel.setItemsValue(sortedArray);
+    }
+
+
 }

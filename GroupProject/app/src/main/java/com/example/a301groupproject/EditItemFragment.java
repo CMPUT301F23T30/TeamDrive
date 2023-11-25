@@ -79,15 +79,16 @@ public class EditItemFragment extends Fragment {
                 setChips(tagText);
             }
         });
-
+        //the bundle received from onItemClick(int position) on HomeFragment. it contains the location of clicking object
+        // and represent this call is from a edit/view purpose
         if (receivedBundle != null) {
             int receivedIntValue = (receivedBundle.getInt("loc"));
-
-            Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+            //build a new item from the homeViewModel which contains the info of item to be view/edit
+            Item i = homeViewModel.getTheItems().getValue().get(receivedIntValue);
 
             String date = i.getDate();
             String[] year_month_day = date.split("-");
-
+            //put the info of viewed item into this fragment
             binding.itemNameInput.setText(i.getName());
             binding.itemModelInput.setText(i.getModel());
             binding.itemMakeInput.setText(i.getMake());
@@ -99,19 +100,21 @@ public class EditItemFragment extends Fragment {
             binding.descriptionInput.setText(i.getDescription());
             binding.commentInput.setText(i.getComment());
             // TODO: only support the viewing of images when checking the detail of an item record
+            //我的思路是，先确保 homeViewModel 里的 images 是空的，然后把需要view的item的image信息预加载上
+            //但是这里可能有问题，因为这个页面要是从 imageFragment navigate的话，这个图片可能会被老的记录重新加载
             homeViewModel.emptyImages();
             ArrayList<String> imageUris = i.getImages();
             for (String uri : imageUris) {
                 homeViewModel.addImage(Uri.parse(uri));
             }
-
+            //load the storing tags
             chipGroup.removeAllViews();
             tagList.clear();
             ArrayList<String> tags = i.getTags();
             for(String tag:tags){
                 setChips(tag);
             }
-
+            //delete the viewing item
             binding.deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -121,7 +124,7 @@ public class EditItemFragment extends Fragment {
 
                 }
             });
-        }else {
+        }else {//if this fragment is created by adding, the delete button will disappear.
             binding.deleteButton.setVisibility(View.INVISIBLE);
         }
 
@@ -207,11 +210,11 @@ public class EditItemFragment extends Fragment {
                 if (receivedBundle == null) {
                     homeViewModel.addItem(item, imageUris);
                     homeViewModel.emptyImages();
-                } else {
+                } else { //the condition of editing
                     int receivedIntValue = (receivedBundle.getInt("loc"));
-                    Item i = homeViewModel.getItems().getValue().get(receivedIntValue);
+                    Item i = homeViewModel.getItems().getValue().get(receivedIntValue); //this item i is created for having the database Id of editing item
                     item.setId(i.getId());
-                    homeViewModel.editItem(item,imageUris);
+                    homeViewModel.editItem(item,imageUris);//using editItem to update
                     homeViewModel.emptyImages();
                 }
 
