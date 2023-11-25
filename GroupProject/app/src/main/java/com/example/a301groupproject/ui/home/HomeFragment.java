@@ -86,13 +86,12 @@ public class HomeFragment extends Fragment implements RvInterface {
 
         Spinner spinner = binding.SpinnerSort;
         String sorter = spinner.getSelectedItem().toString();
-        Toast.makeText(getContext(),sorter,Toast.LENGTH_SHORT).show();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedValue = parent.getItemAtPosition(position).toString();
-                //Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
+                Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
                 sortItem(selectedValue);
                 itemAdapter.notifyDataSetChanged();
             }
@@ -170,6 +169,27 @@ public class HomeFragment extends Fragment implements RvInterface {
                 else if (sorter.equalsIgnoreCase("date↓")) {
                     return o2.getDate().compareToIgnoreCase(o1.getDate());
                 }
+
+                else if (sorter.equalsIgnoreCase("description↑"))
+                    return o1.getDescription().compareToIgnoreCase(o2.getDescription());
+                else if (sorter.equalsIgnoreCase("description↓")) {
+                    return o2.getDescription().compareToIgnoreCase(o1.getDescription());
+                }
+
+                else if (sorter.equalsIgnoreCase("make↑"))
+                    return o1.getMake().compareToIgnoreCase(o2.getMake());
+                else if (sorter.equalsIgnoreCase("make↓")) {
+                    return o2.getMake().compareToIgnoreCase(o1.getMake());
+                }
+
+                else if (sorter.equalsIgnoreCase("value↑"))
+                    return o1.getValue().compareToIgnoreCase(o2.getValue());
+                else if (sorter.equalsIgnoreCase("value↓")) {
+                    return o2.getValue().compareToIgnoreCase(o1.getValue());
+                }
+
+                else if (sorter.equalsIgnoreCase("tag"))
+                    return Integer.compare(o2.getTagsSize(),o1.getTagsSize());
 
                 return 0;
             }

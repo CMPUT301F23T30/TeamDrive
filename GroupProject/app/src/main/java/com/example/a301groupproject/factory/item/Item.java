@@ -99,6 +99,8 @@ public class Item implements Serializable {
         return tags;
     }
 
+    public int getTagsSize(){return tags.size();}
+
     public void setTags(ArrayList<String> tags) {
         this.tags = tags;
     }

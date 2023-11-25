@@ -9,6 +9,7 @@
         <item>make↓</item>
         <item>value↑</item>
         <item>value↓</item>
+        <item>tag</item>
     </string-array>
 
 </resources>
