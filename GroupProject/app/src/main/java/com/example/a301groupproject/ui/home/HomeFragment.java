@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment implements RvInterface {
         });
 
         Spinner spinner = binding.SpinnerSort;
-        String sorter = spinner.getSelectedItem().toString();
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -94,6 +93,7 @@ public class HomeFragment extends Fragment implements RvInterface {
                 Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
                 sortItem(selectedValue);
                 itemAdapter.notifyDataSetChanged();
+
             }
 
             @Override
