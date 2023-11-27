@@ -68,13 +68,18 @@ public class HomeFragment extends Fragment implements RvInterface {
         itemAdapter = new ItemAdapter(itemList, this);
         recyclerView.setAdapter(itemAdapter);
 
+        Spinner spinner = binding.SpinnerSort;
+        spinner.setSelection(0);
+
         binding.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 deleteSelectedItems();
+                spinner.setSelection(0);
             }
         });
         //add the basic spinner to the sort function
+
 
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
@@ -84,13 +89,13 @@ public class HomeFragment extends Fragment implements RvInterface {
             updateTotalValue();
         });
 
-        Spinner spinner = binding.SpinnerSort;
+
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedValue = parent.getItemAtPosition(position).toString();
-                Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(parent.getContext(),selectedValue,Toast.LENGTH_SHORT).show();
                 sortItem(selectedValue);
                 itemAdapter.notifyDataSetChanged();
 
@@ -183,9 +188,9 @@ public class HomeFragment extends Fragment implements RvInterface {
                 }
 
                 else if (sorter.equalsIgnoreCase("value↑"))
-                    return o1.getValue().compareToIgnoreCase(o2.getValue());
+                    return Integer.compare(Integer.parseInt(o1.getValue()), Integer.parseInt(o2.getValue()));
                 else if (sorter.equalsIgnoreCase("value↓")) {
-                    return o2.getValue().compareToIgnoreCase(o1.getValue());
+                    return Integer.compare(Integer.parseInt(o2.getValue()), Integer.parseInt(o1.getValue()));
                 }
 
                 else if (sorter.equalsIgnoreCase("tag"))
