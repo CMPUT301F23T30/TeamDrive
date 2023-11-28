@@ -165,13 +165,28 @@ public class EditItemFragment extends Fragment {
                     return;
                 }
 
+                if (year.length() != 4) {
+                    Toast.makeText(getContext(), "Year should be four digits", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (month.isEmpty()) {
                     Toast.makeText(getContext(), "Please enter mm", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                if (month.length() != 2) {
+                    Toast.makeText(getContext(), "Month should be two digits", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (day.isEmpty()) {
                     Toast.makeText(getContext(), "Please enter dd", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (day.length() != 2) {
+                    Toast.makeText(getContext(), "Date should be two digits", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
