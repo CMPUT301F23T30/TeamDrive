@@ -78,10 +78,6 @@ public class HomeFragment extends Fragment implements RvInterface {
                 spinner.setSelection(0);
             }
         });
-        //add the basic spinner to the sort function
-
-
-
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getItems().observe(getViewLifecycleOwner(), items -> {
             itemAdapter.setItems(items);
@@ -89,6 +85,21 @@ public class HomeFragment extends Fragment implements RvInterface {
             updateTotalValue();
         });
 
+        binding.addTagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.tagEditText.getText().toString().isEmpty()){
+                    Toast.makeText(v.getContext(),"please input the tag to add ",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String newTag = binding.tagEditText.getText().toString();
+                    addTagToItems(newTag);
+                    binding.tagEditText.setText("");
+                    spinner.setSelection(0);
+                    Toast.makeText(v.getContext(),"tag added",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -161,6 +172,26 @@ public class HomeFragment extends Fragment implements RvInterface {
         bundle.putInt("loc", position);
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
+    }
+
+    public void addTagToItems(String newTag){
+        ArrayList<Item> itemsToAddTag = new ArrayList<>();
+        for (Item item : homeViewModel.getTheItems().getValue()) {
+            if (item.isChecked()) {
+                itemsToAddTag.add(item);
+            }
+        }
+        if (itemsToAddTag.isEmpty()){
+            Toast.makeText(this.getContext(),"please select items",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            for (Item item : itemsToAddTag) {
+                ArrayList<String> newTags = item.getTags();
+                newTags.add(newTag);
+                homeViewModel.addTagToItem(item, newTags);
+            }
+        }
+
     }
     public void sortItem(String sorter){
 

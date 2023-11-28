@@ -168,6 +168,24 @@ public class HomeViewModel extends ViewModel {
         itemRef.set(updatedData);
     }
 
+    public void addTagToItem(Item item,ArrayList<String> tags) {
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        DocumentReference itemRef = db.collection("users").document(user.getUid()).collection("items").document(item.getId());
+        Map<String, Object> updatedData = new HashMap<>();
+        updatedData.put("name", item.getName());
+        updatedData.put("model", item.getModel());
+        updatedData.put("make", item.getMake());
+        updatedData.put("date", item.getDate());
+        updatedData.put("serialNumber",item.getSerialNumber());
+        updatedData.put("value", item.getValue());
+        updatedData.put("description",item.getDescription());
+        updatedData.put("comment",item.getComment());
+        updatedData.put("images", item.getImages());
+        updatedData.put("tags",tags);
+        itemRef.set(updatedData);
+    }
+
     /**
      * Calculates the total value of all items by summing their individual values.
      * Handles NumberFormatException if a value is not a valid double.
