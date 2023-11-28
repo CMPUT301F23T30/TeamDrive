@@ -173,7 +173,14 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
-
+    /**
+     * Adds a new tag to the selected items.
+     *
+     * This method iterates through the items that currently checked
+     * and adds the new tag to those.
+     *
+     * @param newTag The new tag to be added to the selected items.
+     */
     public void addTagToItems(String newTag){
         ArrayList<Item> itemsToAddTag = new ArrayList<>();
         for (Item item : homeViewModel.getTheItems().getValue()) {
@@ -193,6 +200,20 @@ public class HomeFragment extends Fragment implements RvInterface {
         }
 
     }
+    /**
+     * Sorts the list of items based on the specified sorting criteria.
+     *
+     * This method takes a sorting criteria string and uses it to determine the sorting order for the list of items.
+     * The supported sorting criteria include "date↑" (ascending date), "date↓" (descending date),
+     * "description↑" (ascending description), "description↓" (descending description),
+     * "make↑" (ascending make), "make↓" (descending make),
+     * "value↑" (ascending value), "value↓" (descending value),
+     * and "tag" (descending number of tags).
+     *
+     * @param sorter The sorting criteria string that determines the order in which the items should be sorted.
+     *               Supported values: "date↑", "date↓", "description↑", "description↓", "make↑", "make↓",
+     *               "value↑", "value↓", "tag".
+     */
     public void sortItem(String sorter){
 
         ArrayList<Item> sortedArray = homeViewModel.getTheItems().getValue();
