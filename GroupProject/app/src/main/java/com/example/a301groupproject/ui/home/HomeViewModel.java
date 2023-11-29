@@ -78,29 +78,26 @@ public class HomeViewModel extends ViewModel {
 
         return items;
     }
-
+    /**
+     * Retrieves the MutableLiveData containing the list of Items.
+     *
+     * This method returns the current local MutableLiveData instance that holds the current list of items without calling databases.
+     *
+     * @return The MutableLiveData containing the list of items.
+     */
     public  MutableLiveData<ArrayList<Item>> getTheItems(){
         return this.items;
     }
+    /**
+     * Sets the value of the MutableLiveData with a new list of Items.
+     *
+     * This method updates the value of the MutableLiveData with a new list of Items.
+     *
+     * @param i The new list of Items to set as the value of the MutableLiveData.
+     */
     public void setItemsValue(ArrayList<Item> i){
         items.setValue(i);
     }
-
-//    public void sortItem(String sorter){
-//        Collections.sort(items.getValue(), new Comparator<Item>(){
-//
-//            @Override
-//            public int compare(Item o1, Item o2) {
-//                if (sorter.equalsIgnoreCase("date↑"))
-//                    return o1.getDate().compareToIgnoreCase(o2.getDate());
-//                else if (sorter.equalsIgnoreCase("date↓")) {
-//                    return o2.getDate().compareToIgnoreCase(o1.getDate());
-//                }
-//
-//                return 0;
-//            }
-//        });
-//    }
 
 
     /**
@@ -165,6 +162,32 @@ public class HomeViewModel extends ViewModel {
         updatedData.put("images", imageUris);
         updatedData.put("tags",item.getTags());
         // Set the updated data in the Firestore document
+        itemRef.set(updatedData);
+    }
+    /**
+     * Adds tags to an item and updates the corresponding data in the Firestore database.
+     *
+     * This method takes an item and a list of tags, updates the item's tags, and then updates the corresponding
+     * document in the Firestore database for the current user.
+     *
+     * @param item The item to which tags are to be added.
+     * @param tags The list of new tags to be added to the item.
+     */
+    public void addTagToItem(Item item,ArrayList<String> tags) {
+        db = FirebaseFirestore.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        DocumentReference itemRef = db.collection("users").document(user.getUid()).collection("items").document(item.getId());
+        Map<String, Object> updatedData = new HashMap<>();
+        updatedData.put("name", item.getName());
+        updatedData.put("model", item.getModel());
+        updatedData.put("make", item.getMake());
+        updatedData.put("date", item.getDate());
+        updatedData.put("serialNumber",item.getSerialNumber());
+        updatedData.put("value", item.getValue());
+        updatedData.put("description",item.getDescription());
+        updatedData.put("comment",item.getComment());
+        updatedData.put("images", item.getImages());
+        updatedData.put("tags",tags);
         itemRef.set(updatedData);
     }
 

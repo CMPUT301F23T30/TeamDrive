@@ -78,10 +78,6 @@ public class HomeFragment extends Fragment implements RvInterface {
                 spinner.setSelection(0);
             }
         });
-        //add the basic spinner to the sort function
-
-
-
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         homeViewModel.getItems().observe(getViewLifecycleOwner(), items -> {
             itemAdapter.setItems(items);
@@ -89,6 +85,21 @@ public class HomeFragment extends Fragment implements RvInterface {
             updateTotalValue();
         });
 
+        binding.addTagButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(binding.tagEditText.getText().toString().isEmpty()){
+                    Toast.makeText(v.getContext(),"please input the tag to add ",Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    String newTag = binding.tagEditText.getText().toString();
+                    addTagToItems(newTag);
+                    binding.tagEditText.setText("");
+                    spinner.setSelection(0);
+                    Toast.makeText(v.getContext(),"tag added",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,6 +173,47 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
+    /**
+     * Adds a new tag to the selected items.
+     *
+     * This method iterates through the items that currently checked
+     * and adds the new tag to those.
+     *
+     * @param newTag The new tag to be added to the selected items.
+     */
+    public void addTagToItems(String newTag){
+        ArrayList<Item> itemsToAddTag = new ArrayList<>();
+        for (Item item : homeViewModel.getTheItems().getValue()) {
+            if (item.isChecked()) {
+                itemsToAddTag.add(item);
+            }
+        }
+        if (itemsToAddTag.isEmpty()){
+            Toast.makeText(this.getContext(),"please select items",Toast.LENGTH_SHORT).show();
+        }
+        else {
+            for (Item item : itemsToAddTag) {
+                ArrayList<String> newTags = item.getTags();
+                newTags.add(newTag);
+                homeViewModel.addTagToItem(item, newTags);
+            }
+        }
+
+    }
+    /**
+     * Sorts the list of items based on the specified sorting criteria.
+     *
+     * This method takes a sorting criteria string and uses it to determine the sorting order for the list of items.
+     * The supported sorting criteria include "date↑" (ascending date), "date↓" (descending date),
+     * "description↑" (ascending description), "description↓" (descending description),
+     * "make↑" (ascending make), "make↓" (descending make),
+     * "value↑" (ascending value), "value↓" (descending value),
+     * and "tag" (descending number of tags).
+     *
+     * @param sorter The sorting criteria string that determines the order in which the items should be sorted.
+     *               Supported values: "date↑", "date↓", "description↑", "description↓", "make↑", "make↓",
+     *               "value↑", "value↓", "tag".
+     */
     public void sortItem(String sorter){
 
         ArrayList<Item> sortedArray = homeViewModel.getTheItems().getValue();
