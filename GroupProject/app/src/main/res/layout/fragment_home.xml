@@ -43,7 +43,7 @@
 
         <Spinner
             android:id="@+id/Spinner_sort"
-            android:layout_width="wrap_content"
+            android:layout_width="190dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="10dp"
@@ -52,24 +52,11 @@
 
         <Button
             android:id="@+id/filterButton"
-            android:layout_width="72dp"
+            android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginEnd="10dp"
             android:text="Filter"
             android:textSize="11sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:text=" Search:"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/searchEditText"
-            android:layout_width="80dp"
-            android:layout_height="match_parent"
-            android:background="@color/white" />
 
 
     </LinearLayout>
@@ -81,11 +68,11 @@
 
         <EditText
             android:id="@+id/tagEditText"
-            android:layout_width="137dp"
+            android:layout_width="198dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:hint="input tag"
-            android:background="@color/white" />
+            android:background="@color/white"
+            android:hint="input tag" />
         <Button
             android:id="@+id/addTagButton"
             android:layout_width="wrap_content"
