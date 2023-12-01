@@ -1,5 +1,6 @@
 package com.example.a301groupproject;
 
+
 import static android.app.Activity.RESULT_OK;
 
 import android.content.Intent;
@@ -8,11 +9,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +44,8 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.mlkit.vision.barcode.BarcodeScanner;
+import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -44,10 +57,13 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.function.Consumer;
 
 /**
  * This is a Fragment that handle the add,edit and delete of an single item record
@@ -273,7 +289,6 @@ public class EditItemFragment extends Fragment {
                 navController.navigate(R.id.nav_images);
             }
         });
-
         binding.imageButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -300,7 +315,6 @@ public class EditItemFragment extends Fragment {
                     intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                     startActivityForResult(intent, TAKE_IMAGE_REQUEST);
                 }
-
             }
         });
 
@@ -318,32 +332,17 @@ public class EditItemFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap;
         if (resultCode == RESULT_OK && requestCode == TAKE_IMAGE_REQUEST) {
             try {
-                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
-                InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
-                TextRecognizer client = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
-                Task<Text> result = client.process(inputImage)
-                        .addOnSuccessListener(new OnSuccessListener<Text>() {
-                            @Override
-                            public void onSuccess(Text text) {
-                                String resultText = text.getText();
-                                String[] individualLine = resultText.split("\\r?\\n");
-                                Pattern pattern = Pattern.compile("(?=.*\\d)[A-Z0-9]{9,}");
-                                String serialNumber = null;
-
-                                for (String line : individualLine) {
-                                    Matcher matcher = pattern.matcher(line);
-
-                                    while (matcher.find()) {
-                                        serialNumber = matcher.group(0);
-                                    }
-                                }
-
-                                binding.serialNumberInput.setText(serialNumber);
-                            }
-                        });
+                if (imageUri != null) {
+                    InputImage inputImage = InputImage.fromFilePath(getContext(), imageUri);
+                    BarcodeScanner client = BarcodeScanning.getClient();
+                    client.process(inputImage)
+                            .addOnSuccessListener(barcodes -> {
+                                String rawValue = barcodes.get(0).getRawValue();
+                                binding.serialNumberInput.setText(rawValue);
+                            });
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

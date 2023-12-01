@@ -1,19 +1,36 @@
 package com.example.a301groupproject.ui.home;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,10 +41,22 @@ import com.example.a301groupproject.databinding.FragmentHomeBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.factory.item.ItemAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+
 import java.util.Collections;
 import java.util.Comparator;
+
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+
 import java.util.Locale;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * HomeFragment is the main UI controller that users interact with for listing, deleting, and managing items.
@@ -84,6 +113,13 @@ public class HomeFragment extends Fragment implements RvInterface {
             itemAdapter.notifyDataSetChanged();
             updateTotalValue();
         });
+        binding.filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterMenu(v);
+            }
+        });
+
 
         binding.addTagButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -101,6 +137,13 @@ public class HomeFragment extends Fragment implements RvInterface {
             }
         });
 
+        binding.scanBlueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
+                navController.navigate(R.id.nav_scan);
+            }
+        });
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -119,7 +162,211 @@ public class HomeFragment extends Fragment implements RvInterface {
         });
 
         return root;
+
     }
+    /**
+     * Displays a filter menu with options for filtering items.
+     *
+     * @param v The view that triggers this menu.
+     */
+    private void showFilterMenu(View v) {
+        PopupMenu filterMenu = new PopupMenu(getContext(), v);
+        filterMenu.getMenu().add("By Date Range");
+        filterMenu.getMenu().add("By Description Keyword");
+        filterMenu.getMenu().add("By Make");
+        filterMenu.getMenu().add("By Tag");
+
+        filterMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getTitle().toString()) {
+                    case "By Date Range":
+                        showDateRangePicker(v);
+                        break;
+                    case "By Description Keyword":
+                        showTextInputDialog("By Description Keyword", this::filterItemsByDescription);
+                        break;
+                    case "By Make":
+                        showTextInputDialog("By Make", this::filterItemsByMake);
+                        break;
+                    case "By Tag":
+                        showTextInputDialog("By Tag", this::filterItemsByTag);
+                        break;
+
+                }
+                return true;
+            }
+            /**
+             * Filters items by their description.
+             *
+             * @param keyword The keyword to filter the description.
+             */
+            private void filterItemsByDescription(String keyword) {
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+                if (allItems != null) {
+                    for (Item item : allItems) {
+                        if (item.getDescription() != null && item.getDescription().toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT))) {
+                            filteredItems.add(item);
+                        }
+                    }
+                }
+                homeViewModel.setItemsValue(filteredItems);
+            }
+
+            /**
+             * Filters items by their make.
+             *
+             * @param make The make to filter the items.
+             */
+            private void filterItemsByMake(String make) {
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+                if (allItems != null) {
+                    for (Item item : allItems) {
+                        if (item.getMake() != null && item.getMake().toLowerCase(Locale.ROOT).contains(make.toLowerCase(Locale.ROOT))) {
+                            filteredItems.add(item);
+                        }
+                    }
+                }
+                homeViewModel.setItemsValue(filteredItems);
+            }
+
+            /**
+             * Filters items by tags.
+             *
+             * @param inputTags The tags to use for filtering.
+             */
+            private void filterItemsByTag(String inputTags) {
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+
+                // Split the inputTags string into individual tags and prepare for comparison
+                Set<String> lowerCaseTagsToFilter = Arrays.stream(inputTags.split(","))
+                        .map(tag -> tag.trim().toLowerCase(Locale.ROOT))
+                        .collect(Collectors.toSet());
+
+                if (allItems != null) {
+                    for (Item item : allItems) {
+                        if (item.getTags() != null) {
+                            Set<String> lowerCaseItemTags = item.getTags().stream()
+                                    .map(String::toLowerCase)
+                                    .collect(Collectors.toSet());
+
+                            // Check if the item's tags contain all the tags to filter
+                            if (lowerCaseItemTags.containsAll(lowerCaseTagsToFilter)) {
+                                filteredItems.add(item);
+                            }
+                        }
+                    }
+                }
+
+                homeViewModel.setItemsValue(filteredItems);
+            }
+
+
+
+        });
+        filterMenu.show();
+
+    }
+
+    private Calendar startDate;
+    private Calendar endDate;
+
+    /**
+     * Shows a date range picker dialog for filtering items by date.
+     *
+     * @param anchorView The view to anchor the date picker dialog to.
+     */
+    private void showDateRangePicker(View anchorView) {
+        startDate = null;
+        endDate = null;
+        // Inflate the custom layout
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View popupView = inflater.inflate(R.layout.date_range_picker, null);
+
+        // Set up the TextViews for start and end dates
+        TextView startDateText = popupView.findViewById(R.id.start_date_text);
+        TextView endDateText = popupView.findViewById(R.id.end_date_text);
+
+        startDateText.setOnClickListener(v -> showDatePickerDialog(true, date -> {
+            startDateText.setText(date);
+            startDate = Calendar.getInstance();
+            try {
+                startDate.setTime(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }));
+
+        endDateText.setOnClickListener(v -> showDatePickerDialog(false, date->{
+            endDateText.setText(date);
+            endDate = Calendar.getInstance();
+            try {
+                endDate.setTime(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }));
+
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setView(popupView);
+        dialogBuilder.setPositiveButton("OK", (dialog, which) -> {
+            if (startDate == null || endDate == null) {
+                Toast.makeText(getContext(), "Please select both start and end dates", Toast.LENGTH_SHORT).show();
+            } else if (endDate.before(startDate)) {
+                Toast.makeText(getContext(), "End date must be after start date", Toast.LENGTH_SHORT).show();
+            } else {
+
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                for (Item item : allItems) {
+                    try {
+                        Date itemDate = format.parse(item.getDate());
+                        if (itemDate != null && !itemDate.before(startDate.getTime()) && !itemDate.after(endDate.getTime())) {
+                            filteredItems.add(item);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace(); // Handle parsing error
+                    }
+                }
+                homeViewModel.setItemsValue(filteredItems);
+
+                dialog.dismiss();
+            }
+
+        });
+        dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    /**
+     * Shows a DatePickerDialog for selecting a date.
+     *
+     * @param isStartDate Indicates whether the date is for the start or end of the range.
+     * @param dateConsumer The consumer to handle the selected date.
+     */
+    private void showDatePickerDialog(boolean isStartDate, Consumer<String> dateConsumer) {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+            dateConsumer.accept(formattedDate);
+        };
+
+        new DatePickerDialog(getContext(), dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+
 
     /**
      * Called when the view hierarchy associated with the fragment is being removed. This ensures the binding
@@ -173,6 +420,7 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
+
     /**
      * Adds a new tag to the selected items.
      *
@@ -252,6 +500,39 @@ public class HomeFragment extends Fragment implements RvInterface {
             }
         });
         homeViewModel.setItemsValue(sortedArray);
+    }
+
+    /**
+     * Shows a text input dialog for filtering items.
+     *
+     * @param title         The title of the dialog.
+     * @param inputHandler  The handler to process the input text.
+     */
+    private void showTextInputDialog(String title, Consumer<String> inputHandler) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setTitle(title);
+
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        if ("By Tag".equals(title)) {
+            input.setHint("Enter tags separated by commas");
+        }
+        dialogBuilder.setView(input);
+
+
+        dialogBuilder.setPositiveButton("OK", (dialog, which) -> {
+            String inputText = input.getText().toString().trim();
+            if (inputText.equals("")){
+                Toast.makeText(getContext(), "Please enter something....", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                inputHandler.accept(inputText);
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        dialogBuilder.show();
+
     }
 
 
