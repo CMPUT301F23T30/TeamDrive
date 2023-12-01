@@ -1,12 +1,20 @@
 package com.example.a301groupproject;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,7 +33,11 @@ import com.google.android.material.chip.ChipGroup;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.function.Consumer;
+
 /**
  * This is a Fragment that handle the add,edit and delete of an single item record
  */
@@ -228,6 +240,8 @@ public class EditItemFragment extends Fragment {
                 navController.navigate(R.id.nav_images);
             }
         });
+
+
 
         return view;
     }

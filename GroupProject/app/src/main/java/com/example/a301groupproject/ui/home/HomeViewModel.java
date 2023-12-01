@@ -141,6 +141,9 @@ public class HomeViewModel extends ViewModel {
         // Set the updated data in the Firestore document
         itemRef.set(updatedData);
     }
+    public  MutableLiveData<ArrayList<Item>> getTheItems(){
+        return this.items;
+    }
 
     /**
      * Calculates the total value of all items by summing their individual values.

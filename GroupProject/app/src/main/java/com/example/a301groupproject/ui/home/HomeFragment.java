@@ -1,10 +1,21 @@
 package com.example.a301groupproject.ui.home;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,8 +30,12 @@ import com.example.a301groupproject.databinding.FragmentHomeBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.factory.item.ItemAdapter;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.function.Consumer;
 
 /**
  * HomeFragment is the main UI controller that users interact with for listing, deleting, and managing items.
@@ -73,9 +88,115 @@ public class HomeFragment extends Fragment implements RvInterface {
             itemAdapter.notifyDataSetChanged();
             updateTotalValue();
         });
+        binding.filterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFilterMenu(v);
+            }
+        });
+
 
         return root;
+
     }
+    private void showFilterMenu(View v) {
+        PopupMenu filterMenu = new PopupMenu(getContext(), v);
+        filterMenu.getMenu().add("By Date Range");
+        filterMenu.getMenu().add("By Description Keyword");
+        filterMenu.getMenu().add("By Make");
+        filterMenu.getMenu().add("By Tag");
+
+        filterMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getTitle().toString()) {
+                    case "By Date Range":
+                        showDateRangePicker(v);
+                        break;
+                    case "By Description Keyword":
+
+                        break;
+                    case "By Make":
+
+                        break;
+                    case "By Tag":
+
+                        break;
+                }
+                return true;
+            }
+        });
+        filterMenu.show();
+    }
+
+    private Calendar startDate;
+    private Calendar endDate;
+
+    private void showDateRangePicker(View anchorView) {
+        startDate = null;
+        endDate = null;
+        // Inflate the custom layout
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View popupView = inflater.inflate(R.layout.date_range_picker, null);
+
+        // Set up the TextViews for start and end dates
+        TextView startDateText = popupView.findViewById(R.id.start_date_text);
+        TextView endDateText = popupView.findViewById(R.id.end_date_text);
+
+        startDateText.setOnClickListener(v -> showDatePickerDialog(true, date -> {
+            startDateText.setText(date);
+            startDate = Calendar.getInstance();
+            try {
+                startDate.setTime(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }));
+
+        endDateText.setOnClickListener(v -> showDatePickerDialog(false, date->{
+            endDateText.setText(date);
+            endDate = Calendar.getInstance();
+            try {
+                endDate.setTime(new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }));
+
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setView(popupView);
+        dialogBuilder.setPositiveButton("OK", (dialog, which) -> {
+            if (startDate == null || endDate == null) {
+                Toast.makeText(getContext(), "Please select both start and end dates", Toast.LENGTH_SHORT).show();
+            } else if (endDate.before(startDate)) {
+                Toast.makeText(getContext(), "End date must be after start date", Toast.LENGTH_SHORT).show();
+            } else {
+                ArrayList<Item> sortedArray = homeViewModel.getTheItems().getValue();
+                dialog.dismiss();
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = dialogBuilder.create();
+        dialog.show();
+    }
+
+    private void showDatePickerDialog(boolean isStartDate, Consumer<String> dateConsumer) {
+        Calendar calendar = Calendar.getInstance();
+        DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
+            calendar.set(year, month, dayOfMonth);
+            String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+            dateConsumer.accept(formattedDate); // Pass the formatted date string to the consumer
+        };
+
+        new DatePickerDialog(getContext(), dateSetListener,
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+
 
     /**
      * Called when the view hierarchy associated with the fragment is being removed. This ensures the binding
@@ -129,4 +250,7 @@ public class HomeFragment extends Fragment implements RvInterface {
         NavController navController = NavHostFragment.findNavController(HomeFragment.this);
         navController.navigate(R.id.nav_addItem, bundle);
     }
+
+
+
 }
