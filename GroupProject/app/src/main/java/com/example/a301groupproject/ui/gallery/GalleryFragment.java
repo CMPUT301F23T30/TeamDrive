@@ -24,8 +24,14 @@ public class GalleryFragment extends Fragment {
         binding = FragmentGalleryBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        final TextView textView = binding.textGallery;
-        galleryViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+        galleryViewModel.getUsername().observe(getViewLifecycleOwner(), username -> {
+            binding.tvUsernameValue.setText(username);
+        });
+
+        galleryViewModel.getUserEmail().observe(getViewLifecycleOwner(), userEmail -> {
+            binding.tvEmailValue.setText(userEmail);
+        });
+
         return root;
     }
 

@@ -27,4 +27,6 @@
     <string name="create_a_new_item">Create A New Item</string>
     <string name="item_name">Item Name</string>
     <string name="item_tag">Item Tag</string>
+    <string name="userName" />
+    <string name="userEmail" />
 </resources>
