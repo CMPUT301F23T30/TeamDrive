@@ -164,4 +164,9 @@ public class HomeViewModel extends ViewModel {
         }
         return total;
     }
+    public void setItemsValue(ArrayList<Item> i){
+        items.setValue(i);
+    }
+
+
 }

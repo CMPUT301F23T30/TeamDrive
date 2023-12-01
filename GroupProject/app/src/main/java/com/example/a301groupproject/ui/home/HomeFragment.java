@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
@@ -19,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -34,8 +37,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * HomeFragment is the main UI controller that users interact with for listing, deleting, and managing items.
@@ -114,19 +119,68 @@ public class HomeFragment extends Fragment implements RvInterface {
                         showDateRangePicker(v);
                         break;
                     case "By Description Keyword":
-
+                        showTextInputDialog("By Description Keyword", this::filterItemsByDescription);
                         break;
                     case "By Make":
-
+                        showTextInputDialog("By Make", this::filterItemsByMake);
                         break;
                     case "By Tag":
-
+                        showTextInputDialog("By Tag", this::filterItemsByTag);
                         break;
+
                 }
                 return true;
             }
+            private void filterItemsByDescription(String keyword) {
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+                if (allItems != null) {
+                    for (Item item : allItems) {
+                        if (item.getDescription() != null && item.getDescription().toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT))) {
+                            filteredItems.add(item);
+                        }
+                    }
+                }
+                homeViewModel.setItemsValue(filteredItems);
+            }
+
+            private void filterItemsByMake(String make) {
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+                if (allItems != null) {
+                    for (Item item : allItems) {
+                        if (item.getMake() != null && item.getMake().toLowerCase(Locale.ROOT).contains(make.toLowerCase(Locale.ROOT))) {
+                            filteredItems.add(item);
+                        }
+                    }
+                }
+                homeViewModel.setItemsValue(filteredItems);
+            }
+
+            private void filterItemsByTag(String tag) {
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+                String lowerCaseTag = tag.toLowerCase(Locale.ROOT);
+
+                if (allItems != null) {
+                    for (Item item : allItems) {
+                        if (item.getTags() != null) {
+                            for (String itemTag : item.getTags()) {
+                                if (itemTag.toLowerCase(Locale.ROOT).contains(lowerCaseTag)) {
+                                    filteredItems.add(item);
+                                    break; // Break the inner loop once a match is found
+                                }
+                            }
+                        }
+                    }
+                }
+
+                homeViewModel.setItemsValue(filteredItems);
+            }
+
         });
         filterMenu.show();
+
     }
 
     private Calendar startDate;
@@ -172,9 +226,27 @@ public class HomeFragment extends Fragment implements RvInterface {
             } else if (endDate.before(startDate)) {
                 Toast.makeText(getContext(), "End date must be after start date", Toast.LENGTH_SHORT).show();
             } else {
-                ArrayList<Item> sortedArray = homeViewModel.getTheItems().getValue();
+
+                ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+                ArrayList<Item> filteredItems = new ArrayList<>();
+
+                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+                for (Item item : allItems) {
+                    try {
+                        Date itemDate = format.parse(item.getDate());
+                        if (itemDate != null && !itemDate.before(startDate.getTime()) && !itemDate.after(endDate.getTime())) {
+                            filteredItems.add(item);
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace(); // Handle parsing error
+                    }
+                }
+
+                homeViewModel.setItemsValue(filteredItems);
+
                 dialog.dismiss();
             }
+
         });
         dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
 
@@ -187,7 +259,7 @@ public class HomeFragment extends Fragment implements RvInterface {
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
             calendar.set(year, month, dayOfMonth);
             String formattedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
-            dateConsumer.accept(formattedDate); // Pass the formatted date string to the consumer
+            dateConsumer.accept(formattedDate);
         };
 
         new DatePickerDialog(getContext(), dateSetListener,
@@ -251,6 +323,41 @@ public class HomeFragment extends Fragment implements RvInterface {
         navController.navigate(R.id.nav_addItem, bundle);
     }
 
+    private void showTextInputDialog(String title, Consumer<String> inputHandler) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        dialogBuilder.setTitle(title);
+
+        final EditText input = new EditText(getContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        dialogBuilder.setView(input);
+
+
+        dialogBuilder.setPositiveButton("OK", (dialog, which) -> {
+            String inputText = input.getText().toString().trim();
+            if (inputText==""){
+                Toast.makeText(getContext(), "Please enter something....", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                inputHandler.accept(inputText);
+            }
+        });
+        dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        dialogBuilder.show();
+    }
+
+    private ArrayList<Item> filterItems(Predicate<Item> filterCondition) {
+        ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
+        ArrayList<Item> filteredItems = new ArrayList<>();
+        if (allItems != null) {
+            for (Item item : allItems) {
+                if (filterCondition.test(item)) {
+                    filteredItems.add(item);
+                }
+            }
+        }
+        return filteredItems;
+    }
 
 
 }
