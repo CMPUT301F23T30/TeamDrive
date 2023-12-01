@@ -190,6 +190,7 @@ public class HomeViewModel extends ViewModel {
         // Set the updated data in the Firestore document
         itemRef.set(updatedData);
     }
+
     /**
      * Adds tags to an item and updates the corresponding data in the Firestore database.
      *
@@ -217,6 +218,11 @@ public class HomeViewModel extends ViewModel {
         itemRef.set(updatedData);
     }
 
+    public  MutableLiveData<ArrayList<Item>> getTheItems(){
+        return this.items;
+
+    }
+
     /**
      * Calculates the total value of all items by summing their individual values.
      * Handles NumberFormatException if a value is not a valid double.
@@ -236,4 +242,9 @@ public class HomeViewModel extends ViewModel {
         }
         return total;
     }
+    public void setItemsValue(ArrayList<Item> i){
+        items.setValue(i);
+    }
+
+
 }
