@@ -492,6 +492,7 @@ public class HomeFragment extends Fragment implements RvInterface {
             }
         });
         homeViewModel.setItemsValue(sortedArray);
+    }
 
     /**
      * Shows a text input dialog for filtering items.

@@ -121,9 +121,7 @@ public class HomeViewModel extends ViewModel {
      *
      * @param i The new list of Items to set as the value of the MutableLiveData.
      */
-    public void setItemsValue(ArrayList<Item> i){
-        items.setValue(i);
-    }
+
 
 
     /**
@@ -218,10 +216,7 @@ public class HomeViewModel extends ViewModel {
         itemRef.set(updatedData);
     }
 
-    public  MutableLiveData<ArrayList<Item>> getTheItems(){
-        return this.items;
-
-    }
+    
 
     /**
      * Calculates the total value of all items by summing their individual values.
