@@ -36,11 +36,14 @@ import com.example.a301groupproject.factory.item.ItemAdapter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * HomeFragment is the main UI controller that users interact with for listing, deleting, and managing items.
@@ -104,6 +107,11 @@ public class HomeFragment extends Fragment implements RvInterface {
         return root;
 
     }
+    /**
+     * Displays a filter menu with options for filtering items.
+     *
+     * @param v The view that triggers this menu.
+     */
     private void showFilterMenu(View v) {
         PopupMenu filterMenu = new PopupMenu(getContext(), v);
         filterMenu.getMenu().add("By Date Range");
@@ -131,6 +139,11 @@ public class HomeFragment extends Fragment implements RvInterface {
                 }
                 return true;
             }
+            /**
+             * Filters items by their description.
+             *
+             * @param keyword The keyword to filter the description.
+             */
             private void filterItemsByDescription(String keyword) {
                 ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
                 ArrayList<Item> filteredItems = new ArrayList<>();
@@ -144,6 +157,11 @@ public class HomeFragment extends Fragment implements RvInterface {
                 homeViewModel.setItemsValue(filteredItems);
             }
 
+            /**
+             * Filters items by their make.
+             *
+             * @param make The make to filter the items.
+             */
             private void filterItemsByMake(String make) {
                 ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
                 ArrayList<Item> filteredItems = new ArrayList<>();
@@ -157,19 +175,30 @@ public class HomeFragment extends Fragment implements RvInterface {
                 homeViewModel.setItemsValue(filteredItems);
             }
 
-            private void filterItemsByTag(String tag) {
+            /**
+             * Filters items by tags.
+             *
+             * @param inputTags The tags to use for filtering.
+             */
+            private void filterItemsByTag(String inputTags) {
                 ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
                 ArrayList<Item> filteredItems = new ArrayList<>();
-                String lowerCaseTag = tag.toLowerCase(Locale.ROOT);
+
+                // Split the inputTags string into individual tags and prepare for comparison
+                Set<String> lowerCaseTagsToFilter = Arrays.stream(inputTags.split(","))
+                        .map(tag -> tag.trim().toLowerCase(Locale.ROOT))
+                        .collect(Collectors.toSet());
 
                 if (allItems != null) {
                     for (Item item : allItems) {
                         if (item.getTags() != null) {
-                            for (String itemTag : item.getTags()) {
-                                if (itemTag.toLowerCase(Locale.ROOT).contains(lowerCaseTag)) {
-                                    filteredItems.add(item);
-                                    break; // Break the inner loop once a match is found
-                                }
+                            Set<String> lowerCaseItemTags = item.getTags().stream()
+                                    .map(String::toLowerCase)
+                                    .collect(Collectors.toSet());
+
+                            // Check if the item's tags contain all the tags to filter
+                            if (lowerCaseItemTags.containsAll(lowerCaseTagsToFilter)) {
+                                filteredItems.add(item);
                             }
                         }
                     }
@@ -177,6 +206,8 @@ public class HomeFragment extends Fragment implements RvInterface {
 
                 homeViewModel.setItemsValue(filteredItems);
             }
+
+
 
         });
         filterMenu.show();
@@ -186,6 +217,11 @@ public class HomeFragment extends Fragment implements RvInterface {
     private Calendar startDate;
     private Calendar endDate;
 
+    /**
+     * Shows a date range picker dialog for filtering items by date.
+     *
+     * @param anchorView The view to anchor the date picker dialog to.
+     */
     private void showDateRangePicker(View anchorView) {
         startDate = null;
         endDate = null;
@@ -241,7 +277,6 @@ public class HomeFragment extends Fragment implements RvInterface {
                         e.printStackTrace(); // Handle parsing error
                     }
                 }
-
                 homeViewModel.setItemsValue(filteredItems);
 
                 dialog.dismiss();
@@ -254,6 +289,12 @@ public class HomeFragment extends Fragment implements RvInterface {
         dialog.show();
     }
 
+    /**
+     * Shows a DatePickerDialog for selecting a date.
+     *
+     * @param isStartDate Indicates whether the date is for the start or end of the range.
+     * @param dateConsumer The consumer to handle the selected date.
+     */
     private void showDatePickerDialog(boolean isStartDate, Consumer<String> dateConsumer) {
         Calendar calendar = Calendar.getInstance();
         DatePickerDialog.OnDateSetListener dateSetListener = (view, year, month, dayOfMonth) -> {
@@ -323,18 +364,27 @@ public class HomeFragment extends Fragment implements RvInterface {
         navController.navigate(R.id.nav_addItem, bundle);
     }
 
+    /**
+     * Shows a text input dialog for filtering items.
+     *
+     * @param title         The title of the dialog.
+     * @param inputHandler  The handler to process the input text.
+     */
     private void showTextInputDialog(String title, Consumer<String> inputHandler) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
         dialogBuilder.setTitle(title);
 
         final EditText input = new EditText(getContext());
         input.setInputType(InputType.TYPE_CLASS_TEXT);
+        if ("By Tag".equals(title)) {
+            input.setHint("Enter tags separated by commas");
+        }
         dialogBuilder.setView(input);
 
 
         dialogBuilder.setPositiveButton("OK", (dialog, which) -> {
             String inputText = input.getText().toString().trim();
-            if (inputText==""){
+            if (inputText.equals("")){
                 Toast.makeText(getContext(), "Please enter something....", Toast.LENGTH_SHORT).show();
             }
             else{
@@ -344,19 +394,6 @@ public class HomeFragment extends Fragment implements RvInterface {
         dialogBuilder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
 
         dialogBuilder.show();
-    }
-
-    private ArrayList<Item> filterItems(Predicate<Item> filterCondition) {
-        ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
-        ArrayList<Item> filteredItems = new ArrayList<>();
-        if (allItems != null) {
-            for (Item item : allItems) {
-                if (filterCondition.test(item)) {
-                    filteredItems.add(item);
-                }
-            }
-        }
-        return filteredItems;
     }
 
 
