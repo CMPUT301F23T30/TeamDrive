@@ -1,7 +1,13 @@
 package com.example.a301groupproject;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,21 +17,38 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.example.a301groupproject.databinding.FragmentAddItemBinding;
+import com.example.a301groupproject.factory.image.Image;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.mlkit.vision.common.InputImage;
+import com.google.mlkit.vision.text.Text;
+import com.google.mlkit.vision.text.TextRecognition;
+import com.google.mlkit.vision.text.TextRecognizer;
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * This is a Fragment that handle the add,edit and delete of an single item record
  */
@@ -36,8 +59,6 @@ public class EditItemFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private Uri imageUri;
-    
-
     EditText itemTagInput;
     Button add_tag;
     ChipGroup chipGroup;
@@ -45,18 +66,21 @@ public class EditItemFragment extends Fragment {
     String input;
     private Object e;
 
+    private static final int TAKE_IMAGE_REQUEST = 2;
+
     /**
      * Default constructor for the EditItemFragment.
      */
     public EditItemFragment() {
     }
+
     /**
      * Inflates the fragment's view and initializes its components.
      *
      * @param inflater           The layout inflater.
      * @param container          The parent view that the fragment's UI should be attached to.
-     * @param savedInstanceState  A saved state bundle.
-     * @return                   The inflated view of the fragment.
+     * @param savedInstanceState A saved state bundle.
+     * @return The inflated view of the fragment.
      */
     @Nullable
     @Override
@@ -113,7 +137,7 @@ public class EditItemFragment extends Fragment {
             chipGroup.removeAllViews();
             tagList.clear();
             ArrayList<String> tags = i.getTags();
-            for(String tag:tags){
+            for (String tag : tags) {
                 setChips(tag);
             }
             //delete the viewing item
@@ -125,7 +149,7 @@ public class EditItemFragment extends Fragment {
                     navController.navigateUp();
                 }
             });
-        }else {//if this fragment is created by adding, the delete button will disappear.
+        } else {//if this fragment is created by adding, the delete button will disappear.
             binding.deleteButton.setVisibility(View.INVISIBLE);
         }
 
@@ -191,6 +215,11 @@ public class EditItemFragment extends Fragment {
                     return;
                 }
 
+                if (serialNumber.isEmpty()) {
+                    Toast.makeText(getContext(), "Please enter the Serial Number with all letters upper cases", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (estimatedValue.isEmpty()) {
                     Toast.makeText(getContext(), "Please enter the item estimated value", Toast.LENGTH_SHORT).show();
                     return;
@@ -225,7 +254,7 @@ public class EditItemFragment extends Fragment {
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue); //this item i is created for having the database Id of editing item
                     item.setId(i.getId());
 
-                    homeViewModel.editItem(item,imageUris);//using editItem to update
+                    homeViewModel.editItem(item, imageUris);//using editItem to update
                 }
 
                 homeViewModel.emptyImages();
@@ -245,14 +274,87 @@ public class EditItemFragment extends Fragment {
             }
         });
 
+        binding.imageButton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                File imageFile = null;
+                imageUri = null;
+                try {
+                    String timeId = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
+                    String imageFileName = "JPEG_" + timeId + "_";
+                    File storageDir = getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    imageFile = File.createTempFile(
+                            imageFileName,
+                            ".jpg",
+                            storageDir
+                    );
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (imageFile != null) {
+                    imageUri = FileProvider.getUriForFile(getContext(),
+                            getContext().getApplicationContext().getPackageName() + ".provider",
+                            imageFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                    startActivityForResult(intent, TAKE_IMAGE_REQUEST);
+                }
+
+            }
+        });
+
         return view;
+    }
+
+    /**
+     * Handles the results getting from the camera and get serial number
+     *
+     * @param requestCode The integer request code originally supplied to startActivityForResult(),
+     *                    allowing you to identify who this result came from.
+     * @param resultCode  The integer result code returned by the child activity through its setResult().
+     * @param data        An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
+     */
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap;
+        if (resultCode == RESULT_OK && requestCode == TAKE_IMAGE_REQUEST) {
+            try {
+                bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                InputImage inputImage = InputImage.fromBitmap(bitmap, 0);
+                TextRecognizer client = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS);
+                Task<Text> result = client.process(inputImage)
+                        .addOnSuccessListener(new OnSuccessListener<Text>() {
+                            @Override
+                            public void onSuccess(Text text) {
+                                String resultText = text.getText();
+                                String[] individualLine = resultText.split("\\r?\\n");
+                                Pattern pattern = Pattern.compile("(?=.*\\d)[A-Z0-9]{9,}");
+                                String serialNumber = null;
+
+                                for (String line : individualLine) {
+                                    Matcher matcher = pattern.matcher(line);
+
+                                    while (matcher.find()) {
+                                        serialNumber = matcher.group(0);
+                                    }
+                                }
+
+                                binding.serialNumberInput.setText(serialNumber);
+                            }
+                        });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
     /**
      * Sets a chip with the specified text in the chip group for tags.
      *
-     * @param e  The text to set in the chip.
+     * @param e The text to set in the chip.
      */
     public void setChips(String e) {
         final Chip chip = (Chip) this.getLayoutInflater().inflate(R.layout.single_input_chip_layout, null, false);
