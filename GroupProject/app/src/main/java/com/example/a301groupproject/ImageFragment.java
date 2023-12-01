@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,6 +26,9 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.factory.image.Image;
 import com.example.a301groupproject.factory.image.ImageAdapter;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
@@ -68,20 +73,30 @@ public class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_images, container, false);
         GridView gridView = view.findViewById(R.id.images);
 
+        images.clear();
+
         imageAdapter = new ImageAdapter(getContext(), images);
+
         gridView.setAdapter(imageAdapter);
 
         HomeViewModel homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
-        ArrayList<Uri> uriList = homeViewModel.getImages().getValue();
+        ArrayList<String> imageUrls = homeViewModel.getImages().getValue();
 
-        if (uriList != null) {
-            images.clear();
-            for (Uri uri : uriList) {
-                images.add(new Image(uri));
+        if (imageUrls != null) {
+            for (String url : imageUrls) {
+                images.add(new Image(url));
             }
         }
 
         imageAdapter.notifyDataSetChanged();
+        imageAdapter.setOnDeleteIconClickListener(new ImageAdapter.OnDeleteIconClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                homeViewModel.addDeleteImage(images.get(position).getImageUrl());
+                images.remove(position);
+                imageAdapter.notifyDataSetChanged();
+            }
+        });
 
         Button cameraButton = view.findViewById(R.id.cameraButton);
         cameraButton.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +106,6 @@ public class ImageFragment extends Fragment {
                 Uri photoURI = createFileUri();
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(intent, TAKE_IMAGE_REQUEST);
-
             }
         });
 
@@ -108,9 +122,10 @@ public class ImageFragment extends Fragment {
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                HomeViewModel homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+                homeViewModel.emptyImages();
+
                 for (Image image : images) {
-                    homeViewModel.addImage(image.getImageUri());
+                    UploadImageToDB(image.getImageUrl(), homeViewModel);
                 }
 
                 // go back to home page after add confirm
@@ -136,10 +151,10 @@ public class ImageFragment extends Fragment {
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_IMAGE_REQUEST && data != null) {
                 Uri imageUri = data.getData();
-                images.add(new Image(imageUri));
+                images.add(new Image(imageUri.toString()));
                 imageAdapter.notifyDataSetChanged();
             } else if (requestCode == TAKE_IMAGE_REQUEST) {
-                images.add(new Image(imageUri));
+                images.add(new Image(imageUri.toString()));
                 imageAdapter.notifyDataSetChanged();
             }
         }
@@ -174,5 +189,33 @@ public class ImageFragment extends Fragment {
         }
 
         return newImageUri;
+    }
+
+    /**
+     * Upload the current image to firebase storage
+     *
+     * @param imageString old image string
+     * @param homeViewModel homeViewModel
+     */
+    public void UploadImageToDB(String imageString, HomeViewModel homeViewModel) {
+
+        if (imageString.contains("content:")) {
+            Uri imageUri = Uri.parse(imageString);
+            StorageReference storageRef = FirebaseStorage.getInstance().getReference();
+            String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            StorageReference imageRef = storageRef.child("images/" + uid + "/" + imageUri.getLastPathSegment());
+
+            imageRef.putFile(imageUri).addOnSuccessListener(taskSnapshot -> {
+                imageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                    Uri downloadUri1 = downloadUri;
+                    homeViewModel.addImage(downloadUri.toString());
+                    homeViewModel.removeDeleteImage(imageString);
+                    homeViewModel.removeDeleteImage(downloadUri1.toString());
+                });
+            });
+        } else {
+            homeViewModel.addImage(imageString);
+            homeViewModel.removeDeleteImage(imageString);
+        }
     }
 }

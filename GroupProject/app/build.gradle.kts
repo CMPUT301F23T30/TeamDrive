@@ -35,7 +35,7 @@ android {
 dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
-
+    implementation("com.google.firebase:firebase-storage:19.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.google.firebase:firebase-auth:latest_version")
@@ -43,6 +43,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation(platform("com.google.firebase:firebase-bom:32.4.1"))
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.github.bumptech.glide:glide:4.12.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")

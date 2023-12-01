@@ -3,37 +3,37 @@ package com.example.a301groupproject.factory.image;
 import android.net.Uri;
 
 /**
- * An image object with an attribute: URI.
+ * An image object with an attribute: URL.
  */
 public class Image {
 
-    private Uri imageUri;
+    private String imageUrl;
 
     /**
      * Constructor for image class
      *
-     * @param imageUri image uri
+     * @param imageUrl image url
      */
-    public Image(Uri imageUri) {
-        this.imageUri = imageUri;
+    public Image(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     /**
-     * get image uri
+     * get image url
      *
-     * @return image uri
+     * @return image url
      */
-    public Uri getImageUri() {
-        return imageUri;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     /**
-     * Set image uri
+     * Set image url
      *
-     * @param imageUri image uri
+     * @param imageUrl image url
      */
-    public void setImageUri(Uri imageUri) {
-        this.imageUri = imageUri;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
 

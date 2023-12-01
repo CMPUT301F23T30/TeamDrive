@@ -1,7 +1,5 @@
 package com.example.a301groupproject.ui.home;
 
-import android.net.Uri;
-
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -13,8 +11,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,32 +21,62 @@ import java.util.Map;
  */
 public class HomeViewModel extends ViewModel {
     private final MutableLiveData<ArrayList<Item>> items = new MutableLiveData<>(new ArrayList<>());
-
-    private MutableLiveData<ArrayList<Uri>> images = new MutableLiveData<>(new ArrayList<>());
-
+    private MutableLiveData<ArrayList<String>> images = new MutableLiveData<>(new ArrayList<>());
     private FirebaseFirestore db;
     private FirebaseUser user;
+    private MutableLiveData<ArrayList<String>> deleteImages = new MutableLiveData<>(new ArrayList<>());
+
     /**
      * Retrieves the live data instance containing the list of image URIs.
      * @return The MutableLiveData object containing the list of image URIs.
      */
-    public MutableLiveData<ArrayList<Uri>> getImages() {
+    public MutableLiveData<ArrayList<String>> getImages() {
         return images;
     }
     /**
      * Adds a new image URI to the existing list of image URIs in the MutableLiveData.
-     * @param uri The new image URI to add to the list.
+     * @param imageUrl The new image URL to add to the list.
      */
-    public void addImage(Uri uri) {
-        ArrayList<Uri> imagesValue = images.getValue();
-        imagesValue.add(uri);
+    public void addImage(String imageUrl) {
+        ArrayList<String> imagesValue = images.getValue();
+        imagesValue.add(imageUrl);
         images.setValue(imagesValue);
     }
+
+    /**
+     * Retrieves the live data instance containing the list of deleted image URIs.
+     * @return The MutableLiveData object containing the list of deleted image URIs.
+     */
+    public MutableLiveData<ArrayList<String>> getDeleteImages() {
+        return deleteImages;
+    }
+    /**
+     * Adds a new image URI to the existing list of deleted image URIs in the MutableLiveData.
+     * @param imageUrl The new image URL to add to the deleted list.
+     */
+    public void addDeleteImage(String imageUrl) {
+        ArrayList<String> imagesValue = deleteImages.getValue();
+        imagesValue.add(imageUrl);
+        deleteImages.setValue(imagesValue);
+    }
+
+    public void removeDeleteImage(String imageUrl) {
+        ArrayList<String> imagesValue = deleteImages.getValue();
+        imagesValue.remove(imageUrl);
+        deleteImages.setValue(imagesValue);
+    }
+
     /**
      * Clears the list of image URIs, setting an empty list in the MutableLiveData.
      */
     public void emptyImages() {
         images.setValue(new ArrayList<>());
+    }
+    /**
+     * Clears the list of deleted image URIs, setting an empty list in the MutableLiveData.
+     */
+    public void emptyDeletedImages() {
+        deleteImages.setValue(new ArrayList<>());
     }
     /**
      * Gets the live data list of items. It initializes or updates the list of items from Firestore

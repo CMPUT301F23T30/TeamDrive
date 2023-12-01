@@ -65,6 +65,7 @@ public class EditItemFragment extends Fragment {
         View view = binding.getRoot();
 
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
+
         Bundle receivedBundle = getArguments();
 
         //Tags function
@@ -99,14 +100,15 @@ public class EditItemFragment extends Fragment {
             binding.estimatedValueInput.setText(i.getValue());
             binding.descriptionInput.setText(i.getDescription());
             binding.commentInput.setText(i.getComment());
-            // TODO: only support the viewing of images when checking the detail of an item record
-            //我的思路是，先确保 homeViewModel 里的 images 是空的，然后把需要view的item的image信息预加载上
-            //但是这里可能有问题，因为这个页面要是从 imageFragment navigate的话，这个图片可能会被老的记录重新加载
-            homeViewModel.emptyImages();
-            ArrayList<String> imageUris = i.getImages();
-            for (String uri : imageUris) {
-                homeViewModel.addImage(Uri.parse(uri));
+
+            for (String imageUrl : i.getImages()) {
+                if (!homeViewModel.getImages().getValue().contains(imageUrl)) {
+                    if (!homeViewModel.getDeleteImages().getValue().contains(imageUrl)) {
+                        homeViewModel.addImage(imageUrl);
+                    }
+                }
             }
+
             //load the storing tags
             chipGroup.removeAllViews();
             tagList.clear();
@@ -121,7 +123,6 @@ public class EditItemFragment extends Fragment {
                     homeViewModel.removeItem(homeViewModel.getItems().getValue().get(receivedIntValue));
                     NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);
                     navController.navigateUp();
-
                 }
             });
         }else {//if this fragment is created by adding, the delete button will disappear.
@@ -214,24 +215,21 @@ public class EditItemFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter a valid number", Toast.LENGTH_SHORT).show();
                 }
 
-                ArrayList<String> imageUris = new ArrayList<>();
-                ArrayList<Uri> UriImageUris = homeViewModel.getImages().getValue();
-
-                for (Uri uri : UriImageUris) {
-                    imageUris.add(uri.toString());
-                }
+                ArrayList<String> imageUris = homeViewModel.getImages().getValue();
 
                 Item item = new Item(itemName, itemModel, itemMake, itemDate, estimatedValue, serialNumber, description, comment, tagList);
                 if (receivedBundle == null) {
                     homeViewModel.addItem(item, imageUris);
-                    homeViewModel.emptyImages();
                 } else { //the condition of editing
                     int receivedIntValue = (receivedBundle.getInt("loc"));
                     Item i = homeViewModel.getItems().getValue().get(receivedIntValue); //this item i is created for having the database Id of editing item
                     item.setId(i.getId());
+
                     homeViewModel.editItem(item,imageUris);//using editItem to update
-                    homeViewModel.emptyImages();
                 }
+
+                homeViewModel.emptyImages();
+                homeViewModel.emptyDeletedImages();
 
                 // go back to home page after add confirm
                 NavController navController = Navigation.findNavController(getActivity(), R.id.nav_host_fragment_content_main);

@@ -7,7 +7,12 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
+import androidx.lifecycle.ViewModelProvider;
+
+import com.bumptech.glide.Glide;
+
 import com.example.a301groupproject.R;
+import com.example.a301groupproject.ui.home.HomeViewModel;
 
 import java.util.ArrayList;
 
@@ -17,6 +22,15 @@ import java.util.ArrayList;
 public class ImageAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Image> images;
+    private OnDeleteIconClickListener onDeleteIconClickListener;
+
+    public void setOnDeleteIconClickListener(OnDeleteIconClickListener listener) {
+        this.onDeleteIconClickListener = listener;
+    }
+
+    public interface OnDeleteIconClickListener {
+        void onDeleteClick(int position);
+    }
 
     /**
      * Constructor for the ImageAdapter with a context and images list.
@@ -80,13 +94,16 @@ public class ImageAdapter extends BaseAdapter {
         ImageView deleteIcon = convertView.findViewById(R.id.delete_image_button);
 
         Image image = images.get(position);
-        individualImage.setImageURI(image.getImageUri());
+        Glide.with(context)
+                .load(image.getImageUrl())
+                .into(individualImage);
 
         deleteIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                images.remove(position);
-                notifyDataSetChanged();
+                if (onDeleteIconClickListener != null) {
+                    onDeleteIconClickListener.onDeleteClick(position);
+                }
             }
         });
 
