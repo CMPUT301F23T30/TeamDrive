@@ -4,42 +4,58 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
+
 
 public class GalleryViewModel extends ViewModel {
 
-    private MutableLiveData<String> mUsername;
-    private MutableLiveData<String> mUserEmail;
+    private FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    private String email;
+
+    private MutableLiveData<String> userEmail = new MutableLiveData<>();
+    private MutableLiveData<String> UserName = new MutableLiveData<>();
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    private String username;
 
     public GalleryViewModel() {
-        mUsername = new MutableLiveData<>();
-        mUserEmail = new MutableLiveData<>();
-
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-        String userId = mAuth.getCurrentUser().getUid();
-        db.collection("users").document(userId).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                String username = task.getResult().getString("username");
-                String userEmail = task.getResult().getString("email"); // replace "email" with your actual field name
-
-                mUsername.setValue(username);
-                mUserEmail.setValue(userEmail);
-            } else {
-
-            }
-        });
+        fetchUserData();
     }
 
-    public LiveData<String> getUsername() {
-        return mUsername;
+    public void fetchUserData() {
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        if (currentUser != null) {
+            email = currentUser.getEmail();
+            String uid = currentUser.getUid();
+
+            Task<DocumentSnapshot> users = mFirestore.collection("users").document(email).get();
+            users.addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    setUsername(documentSnapshot.getString("username"));
+                }
+            });
+
+        }
     }
 
-    public LiveData<String> getUserEmail() {
-        return mUserEmail;
+    // String getters
+    public String getUsername() {
+        return username;
     }
 
-
+    public String getUserEmail() {
+        return email;
+    }
 }
+

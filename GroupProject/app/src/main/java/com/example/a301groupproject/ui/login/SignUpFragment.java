@@ -75,23 +75,39 @@ public class SignUpFragment extends Fragment {
                 }
 
                 if (password.equals(reEnterPassword)) {
-                    mFirestore.collection("users").document(username).get()
-                            .addOnSuccessListener(documentSnapshot -> {
-                                if (documentSnapshot.exists()) {
+                    // Check if the username exists
+                    mFirestore.collection("users")
+                            .whereEqualTo("username", username)
+                            .get()
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                                    // Username already exists
                                     Toast.makeText(getActivity(), "Username already exists", Toast.LENGTH_SHORT).show();
-
-
                                 } else {
-                                    createUserWithEmailAndUsername(email, password, username);
-                                    getParentFragmentManager().beginTransaction()
-                                            .replace(R.id.fragment_container, new LoginFragment())
-                                            .addToBackStack(null)
-                                            .commit();
+                                    // Username is unique, now check the email
+                                    mFirestore.collection("users")
+                                            .whereEqualTo("email", email)
+                                            .get()
+                                            .addOnCompleteListener(emailCheckTask -> {
+                                                if (emailCheckTask.isSuccessful() && !emailCheckTask.getResult().isEmpty()) {
+                                                    // Email already exists
+                                                    Toast.makeText(getActivity(), "Email already in use", Toast.LENGTH_SHORT).show();
+                                                } else {
+                                                    // Both username and email are unique, proceed with account creation
+                                                    createUserWithEmailAndUsername(email, password, username);
+                                                    // Navigate to the LoginFragment
+                                                    getParentFragmentManager().beginTransaction()
+                                                            .replace(R.id.fragment_container, new LoginFragment())
+                                                            .addToBackStack(null)
+                                                            .commit();
+                                                }
+                                            });
                                 }
                             })
                             .addOnFailureListener(e -> {
                                 Toast.makeText(getActivity(), "Error checking for username", Toast.LENGTH_SHORT).show();
-                                Log.e("SignUpError", "Error checking username", e);                            });
+                                Log.e("SignUpError", "Error checking username", e);
+                            });
                 } else {
                     Toast.makeText(getActivity(), "Passwords do not match", Toast.LENGTH_SHORT).show();
                 }
@@ -142,7 +158,7 @@ public class SignUpFragment extends Fragment {
         user.put("username", username);
         user.put("email", email);
 
-        mFirestore.collection("users").document(username).set(user)
+        mFirestore.collection("users").document(email).set(user)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(getActivity(), "Successful Sign Up", Toast.LENGTH_SHORT).show();
                 })
