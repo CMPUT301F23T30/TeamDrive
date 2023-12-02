@@ -38,6 +38,7 @@ import com.example.a301groupproject.databinding.FragmentAddItemBinding;
 import com.example.a301groupproject.factory.image.Image;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.Chip;
@@ -341,7 +342,14 @@ public class EditItemFragment extends Fragment {
                             .addOnSuccessListener(barcodes -> {
                                 String rawValue = barcodes.get(0).getRawValue();
                                 binding.serialNumberInput.setText(rawValue);
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Please take the picture again", Toast.LENGTH_SHORT).show();
+                                }
                             });
+                } else {
+                    Toast.makeText(getContext(), "Please take a picture with barcode", Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();

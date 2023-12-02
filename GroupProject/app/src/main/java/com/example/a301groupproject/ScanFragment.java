@@ -22,6 +22,7 @@ import androidx.navigation.Navigation;
 import com.example.a301groupproject.databinding.FragmentScanBinding;
 import com.example.a301groupproject.factory.item.Item;
 import com.example.a301groupproject.ui.home.HomeViewModel;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -148,7 +149,14 @@ public class ScanFragment extends Fragment {
                                     Toast.makeText(getContext(), "Please take the picture again, the serial number is missing", Toast.LENGTH_SHORT).show();
                                 }
 
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getContext(), "Please take the picture again", Toast.LENGTH_SHORT).show();
+                                }
                             });
+                } else {
+                    Toast.makeText(getContext(), "Please take a picture with barcode", Toast.LENGTH_SHORT).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -176,11 +184,14 @@ public class ScanFragment extends Fragment {
                                     String description = item.getDescription();
 
                                     if (description != null) {
+                                        binding.descriptionDetailsTextView.setText(null);
                                         binding.descriptionDetailsTextView.setText(description);
                                     }
                                 }
 
                             }
+                        } else {
+                            Toast.makeText(getContext(), "Please take the picture again", Toast.LENGTH_SHORT).show();
                         }
                     });
         }
