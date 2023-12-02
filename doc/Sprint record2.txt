@@ -1,0 +1,50 @@
+sprint Goal: complete all of the user stories and get ready for the final delivery.
+Duration: Nov 20th to Dec 04th
+
+Recording:
+
+Week1:
+Nov 21st: 1st sprint meeting with TA
+	All members were presented. 
+	Group members showed the demo of the halfway checkpoint. TA evaluated and gave feedback on it.
+	Every group member is assigned their responsibility for the remaining user stories
+			
+		Work setup:
+		Steven Xu: Full version of User profile, filter function.
+		Yang Guo: UI mockup, UMl, and test case, a small modification of adding function.
+		Weijia Chen: UI mockup, UMl, and test case.
+		Haoyu Zheng: Sorting function and batch tag adding function
+		Dian Huang: UI mockup, UMl, and test case, a small modification of tag function.
+		Xiangpeng Ji: Modify photo/image function and implement bar code scan function
+
+	
+Week2:
+Nov 28th: 2nd sprint meeting with TA
+	Most members were presented.
+	Confirm everyone's progress
+	TA confirmed the ongoing process and noticed the details of final demo.
+
+	(before meeting) Work done:
+		Steven Xu: The creation of filter function.
+		Yang Guo: Input restriction modification for adding function.
+		Weijia Chen: UI adjustment.
+		Haoyu Zheng: Complete all the sorting functions.
+		Dian Huang: fix the bug in the tag function.
+		Xiangpeng Ji: refactor image/photo function.
+
+
+Week3:
+Dec 04th: The Finishing touches before the final demo
+	All the functions that are required by user stories are implemented.s
+	Groups merged all branches
+
+	(before meeting) Work done:
+		Steven Xu: Complete the user profile on the homepage, add the restriction of register's email
+		Yang Guo: UI mockup, UMl, and test case creation
+		Weijia Chen: UI mockup, UMl, and test case creation
+		Haoyu Zheng: Finished the batch tag-adding function on the homepage. Small fix of the app’s texts.
+		Dian Huang: UI mockup, UMl, and test case creation
+		Xiangpeng Ji: The bar code scanning function completed
+
+	The project is fully merged and tested, good for delivery.
+
