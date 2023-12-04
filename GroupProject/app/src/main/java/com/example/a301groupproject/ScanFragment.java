@@ -40,7 +40,7 @@ import java.util.Locale;
 
 public class ScanFragment extends Fragment {
 
-    private FragmentScanBinding binding;
+    FragmentScanBinding binding;
 
     private HomeViewModel homeViewModel;
 
@@ -195,5 +195,8 @@ public class ScanFragment extends Fragment {
                         }
                     });
         }
+    }
+    public int getTakeImageRequest() {
+        return TAKE_IMAGE_REQUEST;
     }
 }
