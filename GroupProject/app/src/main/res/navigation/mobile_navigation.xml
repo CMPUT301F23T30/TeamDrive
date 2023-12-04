@@ -14,7 +14,7 @@
     <fragment
         android:id="@+id/nav_gallery"
         android:name="com.example.a301groupproject.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
+        android:label="Profile"
         tools:layout="@layout/fragment_gallery" />
 
     <fragment
