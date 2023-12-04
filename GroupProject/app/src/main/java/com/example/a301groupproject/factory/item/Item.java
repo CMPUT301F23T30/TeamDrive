@@ -2,6 +2,9 @@ package com.example.a301groupproject.factory.item;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+/**
+ * Represents an item with various properties such as name, model, make, date, serial number, value, tags, etc.
+ */
 
 public class Item implements Serializable {
 
@@ -17,7 +20,19 @@ public class Item implements Serializable {
     private String id;
     private ArrayList<String> images;
     private boolean isChecked;
-
+    /**
+     * Constructs an Item with specified properties.
+     *
+     * @param name         The name of the item.
+     * @param model        The model of the item.
+     * @param make         The make of the item.
+     * @param date         The date associated with the item.
+     * @param value        The value of the item.
+     * @param serialNumber The serial number of the item.
+     * @param description  The description of the item.
+     * @param comment      Additional comments related to the item.
+     * @param tags         The tags associated with the item.
+     */
     public Item(String name, String model, String make, String date, String value, String serialNumber, String description, String comment, ArrayList<String> tags) {
         this.name = name;
         this.model = model;
