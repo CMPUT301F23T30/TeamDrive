@@ -17,7 +17,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import java.util.ArrayList;
 @RunWith(MockitoJUnitRunner.class)
 
-public class CalculateTotalValueTest{
+public class HomeViewModelTest{
     @Rule
     public InstantTaskExecutorRule instantTaskExecutorRule = new InstantTaskExecutorRule();
 
