@@ -84,7 +84,7 @@ public class ItemViewEditDeleteTest {
         }
     }
     @Test
-    public void viewAndEditTest(){
+    public void viewAndEditDeleteTest(){
         login();
         objSetup();
         onView(withId(R.id.recycle_view))
@@ -122,19 +122,6 @@ public class ItemViewEditDeleteTest {
 
         onView(withId(R.id.itemNameInput)).check(matches(withText("Engine-new")));
 
-
-
-    }
-    @Test
-    public void viewDeleteTest(){
-        login();
-        onView(withId(R.id.recycle_view))
-                .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         onView(withId(R.id.editScroll))
                 .perform(ViewActions.swipeUp());
         try {
@@ -143,7 +130,6 @@ public class ItemViewEditDeleteTest {
             e.printStackTrace();
         }
         onView(withId(R.id.deleteButton)).perform(click());
-
 
     }
 
