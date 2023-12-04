@@ -6,7 +6,6 @@ plugins {
 android {
     namespace = "com.example.a301groupproject"
     compileSdk = 34
-
     defaultConfig {
         applicationId = "com.example.a301groupproject"
         minSdk = 24
@@ -33,7 +32,11 @@ android {
 }
 
 dependencies {
+    implementation("junit:junit:4.12")
+    implementation("androidx.fragment:fragment-testing:1.6.2")
     testImplementation("junit:junit:4.13.2")
+    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    implementation("com.google.mlkit:barcode-scanning:17.2.0")
     androidTestImplementation("androidx.test.uiautomator:uiautomator:2.2.0")
     implementation("com.google.firebase:firebase-storage:19.2.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -61,6 +64,6 @@ dependencies {
     testImplementation("org.mockito:mockito-core:3.11.2")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.2.0")
     compileOnly(files("${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"))
-
+    testImplementation("androidx.arch.core:core-testing:2.1.0")
 
 }

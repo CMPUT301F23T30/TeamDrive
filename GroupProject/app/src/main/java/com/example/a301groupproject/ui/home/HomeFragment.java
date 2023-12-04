@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment implements RvInterface {
 
     private ItemAdapter itemAdapter;
 
-    private HomeViewModel homeViewModel;
+    public HomeViewModel homeViewModel;
 
 
     /**
@@ -169,7 +169,7 @@ public class HomeFragment extends Fragment implements RvInterface {
      *
      * @param v The view that triggers this menu.
      */
-    private void showFilterMenu(View v) {
+    public void showFilterMenu(View v) {
         PopupMenu filterMenu = new PopupMenu(getContext(), v);
         filterMenu.getMenu().add("By Date Range");
         filterMenu.getMenu().add("By Description Keyword");
@@ -201,7 +201,7 @@ public class HomeFragment extends Fragment implements RvInterface {
              *
              * @param keyword The keyword to filter the description.
              */
-            private void filterItemsByDescription(String keyword) {
+            public void filterItemsByDescription(String keyword) {
                 ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
                 ArrayList<Item> filteredItems = new ArrayList<>();
                 if (allItems != null) {
@@ -219,7 +219,7 @@ public class HomeFragment extends Fragment implements RvInterface {
              *
              * @param make The make to filter the items.
              */
-            private void filterItemsByMake(String make) {
+            public void filterItemsByMake(String make) {
                 ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
                 ArrayList<Item> filteredItems = new ArrayList<>();
                 if (allItems != null) {
@@ -237,7 +237,7 @@ public class HomeFragment extends Fragment implements RvInterface {
              *
              * @param inputTags The tags to use for filtering.
              */
-            private void filterItemsByTag(String inputTags) {
+            public void filterItemsByTag(String inputTags) {
                 ArrayList<Item> allItems = homeViewModel.getTheItems().getValue();
                 ArrayList<Item> filteredItems = new ArrayList<>();
 
@@ -535,5 +535,13 @@ public class HomeFragment extends Fragment implements RvInterface {
 
     }
 
+    /**
+     * Set the home view environment
+     *
+     * @param homeViewModel       The instance of HomeViewModel
+     */
 
+    public void setHomeViewModel(HomeViewModel homeViewModel) {
+        this.homeViewModel = homeViewModel;
+    }
 }
