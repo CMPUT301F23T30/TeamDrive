@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="sort">
-        <item>sortBy</item>
+        <item>SortBy</item>
         <item>date↑</item>
         <item>date↓</item>
         <item>description↑</item>

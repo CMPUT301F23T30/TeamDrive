@@ -8,24 +8,21 @@
     android:padding="16dp">
 
     <ScrollView
-        android:id="@+id/editScroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:scrollbarTrackHorizontal="@drawable/ic_menu_camera">
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/item_name"
+                android:text="Item Name"
                 android:textStyle="bold" />
 
             <EditText
@@ -65,8 +62,7 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="Date"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -77,64 +73,48 @@
                     android:id="@+id/input_year"
                     android:layout_width="147dp"
                     android:layout_height="wrap_content"
-                    android:autofillHints="2023"
                     android:background="#C3F4EAEA"
-                    android:ems="4"
                     android:gravity="center"
                     android:hint="YYYY"
                     android:inputType="number"
                     android:maxLength="4"
-                    android:textSize="20sp">
-
-                </EditText>
+                    android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/input_slash_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-"
-                    android:textSize="25dp">
-
-                </TextView>
+                    android:textSize="25dp"/>
 
                 <EditText
                     android:id="@+id/input_month"
                     android:layout_width="86dp"
                     android:layout_height="wrap_content"
-                    android:autofillHints="10"
                     android:background="#C3F4EAEA"
-                    android:ems="2"
                     android:gravity="center"
                     android:hint="MM"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:textSize="20sp">
-
-                </EditText>
+                    android:textSize="20sp"/>
 
                 <TextView
                     android:id="@+id/input_slash_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="-"
-                    android:textSize="25dp">
-
-                </TextView>
+                    android:textSize="25dp"/>
 
                 <EditText
                     android:id="@+id/input_day"
                     android:layout_width="62dp"
                     android:layout_height="wrap_content"
-                    android:autofillHints="10"
                     android:background="#C3F4EAEA"
-                    android:ems="2"
                     android:gravity="center"
                     android:hint="DD"
                     android:inputType="number"
                     android:maxLength="2"
-                    android:textSize="20sp">
-
-                </EditText>
+                    android:textSize="20sp"/>
 
             </LinearLayout>
 
@@ -146,14 +126,15 @@
                 android:textStyle="bold" />
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/serialNumberInput"
-                    android:layout_width="304dp"
+                    android:layout_width="0dp"
                     android:layout_height="35dp"
+                    android:layout_weight="1"
                     android:background="#C3F4EAEA" />
 
                 <ImageButton
@@ -161,7 +142,6 @@
                     android:layout_width="56dp"
                     android:layout_height="match_parent"
                     android:background="#E5B5B5"
-                    android:gravity="center"
                     app:srcCompat="@drawable/ic_menu_camera" />
 
             </LinearLayout>
@@ -207,31 +187,31 @@
                 android:layout_height="34dp"
                 android:background="#C3F4EAEA"
                 android:inputType="textMultiLine" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="5dp"
-                android:text="@string/item_tag"
+                android:text="Item Tag"
                 android:textStyle="bold" />
 
-
             <LinearLayout
-                android:layout_width="503dp"
-                android:layout_height="60dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <EditText
                     android:id="@+id/itemTagInput"
-                    android:layout_width="214dp"
+                    android:layout_width="0dp"
                     android:layout_height="36dp"
+                    android:layout_weight="1"
                     android:background="#C3F4EAEA"
                     android:textStyle="bold" />
 
                 <Button
                     android:id="@+id/addtagbutton"
-                    android:layout_width="113dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
                     android:text="Add Tag" />
 
             </LinearLayout>
@@ -239,7 +219,8 @@
             <com.google.android.material.chip.ChipGroup
                 android:id="@+id/chipgroup"
                 android:layout_width="match_parent"
-                android:layout_height="91dp">
+                android:layout_height="wrap_content">
+                <!-- Chips can be dynamically added here -->
             </com.google.android.material.chip.ChipGroup>
 
             <Button
@@ -272,5 +253,4 @@
 
         </LinearLayout>
     </ScrollView>
-
 </LinearLayout>
